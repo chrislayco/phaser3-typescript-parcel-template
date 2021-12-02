@@ -1,11 +1,18 @@
 import Phaser from 'phaser'
+import * as Colyseus from 'colyseus.js'
 
 export default class HelloWorldScene extends Phaser.Scene
 {
+    private client: Colyseus.Client
 	constructor()
 	{
 		super('hello-world')
 	}
+
+    init()
+    {
+        this.client = new Colyseus.Client('ws://localhost:2567')
+    }
 
 	preload()
     {
@@ -16,7 +23,7 @@ export default class HelloWorldScene extends Phaser.Scene
         this.load.image('red', 'assets/particles/red.png')
     }
 
-    create()
+    async create()
     {
         this.add.image(400, 300, 'sky')
 
@@ -35,5 +42,9 @@ export default class HelloWorldScene extends Phaser.Scene
         logo.setCollideWorldBounds(true)
 
         emitter.startFollow(logo)
+
+        const room = await this.client.joinOrCreate('my_room')
+
+        console.log(room.name)
     }
 }
