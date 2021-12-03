@@ -25,6 +25,10 @@ export default class HelloWorldScene extends Phaser.Scene
 
     async create()
     {
+        //test
+        const room = await this.client.joinOrCreate('my_room')
+
+
         this.add.image(400, 300, 'sky')
 
         const particles = this.add.particles('red')
@@ -43,7 +47,14 @@ export default class HelloWorldScene extends Phaser.Scene
 
         emitter.startFollow(logo)
 
-        const room = await this.client.joinOrCreate('my_room')
+        room.onMessage('keydown', (message) => {
+            console.log(message)
+        })
+
+        this.input.keyboard.on('keydown', (evt: KeyboardEvent) => {
+            room.send('keydown', evt.key)
+        })
+
 
         console.log(room.name)
     }
