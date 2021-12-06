@@ -36,11 +36,13 @@
 	},
 	"dependencies": {
 		"@colyseus/arena": "^0.14.22",
+		"@colyseus/command": "^0.2.0",
 		"@colyseus/monitor": "^0.14.20",
 		"colyseus": "^0.14.20",
 		"colyseus.js": "^0.14.13",
 		"cors": "^2.8.5",
 		"express": "^4.16.4",
+		"parcel": "^2.0.1",
 		"phaser": "^3.55.2",
 		"regenerator-runtime": "^0.13.9"
 	},

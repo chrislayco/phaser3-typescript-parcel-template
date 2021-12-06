@@ -1,12 +1,20 @@
-import { Client } from "colyseus.js"
+import { Client, Room } from "colyseus.js"
+import { Schema } from "@colyseus/schema"
+import { EventEmitter } from "colyseus.js/lib/core/signal"
+import Phaser from 'phaser'
+import IMyState from "~/types/IMyState"
+import { Message } from "../../types/messages"
 
 export default class Server
 {
     private client: Client
+    private events: Phaser.Events.EventEmitter
+    private room?: Room<IMyState & Schema>
 
     constructor()
     {
         this.client = new Client('ws://localhost:2567')
+        this.events = new Phaser.Events.EventEmitter()
         console.log(this.client)
 
     }
@@ -14,8 +22,31 @@ export default class Server
 
     async join()
     {
-        const room = await this.client.joinOrCreate('my_room')
-        console.log(room)
+        this.room = await this.client.joinOrCreate<IMyState & Schema>('my_room')
+        
+        this.room.onStateChange.once(state => {
+            this.events.emit('once-state-changed', state)
+        })
 
+        this.room.state.onChange = (changes) => {
+            changes.forEach(change => {
+                console.log(change)
+            })
+        }
+    }
+
+    makeSelection(idx: number)
+    {
+        if(!this.room)
+        {
+            return
+        }
+
+        this.room.send(Message.PlayerSelection, {index: idx})
+    }
+
+    onceStateChanged(cb: (state: IMyState) => void, context?: any)
+    {
+        this.events.once('once-state-changed', cb, context)
     }
 } 
