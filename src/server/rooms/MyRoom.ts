@@ -12,8 +12,8 @@ export class MyRoom extends Room<MyRoomState> {
   onCreate (options: any) {
     this.setState(new MyRoomState());
 
-    this.onMessage(Message.PlayerSelection, (client, message) => {
-      console.log(message)
+    this.onMessage(Message.PlayerSelection, (client, message: {index: number}) => {
+      //console.log(message)
       this.dispatcher.dispatch(new PlayerSelectionCommand(), {
         client,
         index: message.index

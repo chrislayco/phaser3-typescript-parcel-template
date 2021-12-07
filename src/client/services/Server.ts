@@ -4,6 +4,7 @@ import { EventEmitter } from "colyseus.js/lib/core/signal"
 import Phaser from 'phaser'
 import IMyState from "~/types/IMyState"
 import { Message } from "../../types/messages"
+import MyRoomState from "~/server/rooms/schema/MyRoomState"
 
 export default class Server
 {
@@ -28,9 +29,19 @@ export default class Server
             this.events.emit('once-state-changed', state)
         })
 
-        this.room.state.onChange = (changes) => {
+        this.room.state.onChange = changes => {
             changes.forEach(change => {
                 console.log(change)
+
+                const { field, value} = change
+                
+                switch(field)
+                {
+                    case 'board':
+                        this.events.emit('board-changed')
+                        break
+                    
+                }
             })
         }
     }
@@ -48,5 +59,10 @@ export default class Server
     onceStateChanged(cb: (state: IMyState) => void, context?: any)
     {
         this.events.once('once-state-changed', cb, context)
+    }
+
+    onBoardChanged(cb: (state: MyRoomState) => void, context?: any)
+    {
+        this.events.on('board-changed', cb, context)
     }
 } 
