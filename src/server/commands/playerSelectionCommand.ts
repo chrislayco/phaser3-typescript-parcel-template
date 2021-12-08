@@ -17,7 +17,7 @@ export default class PlayerSelectionCommand extends Command<IMyState, Payload>
         const cellValue = clientIndex === 0 ? Cell.X : Cell.O
         this.room.state.board[index] = cellValue
         //console.log(`index ${index} to ${cellValue}`)
-
+        
         this.room.state.board.forEach(cellValue => {
             console.log(cellValue)
         })
