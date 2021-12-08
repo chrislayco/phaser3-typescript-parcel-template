@@ -38,8 +38,7 @@ export default class Game extends Phaser.Scene
 
     private createBoard(state: IMyState)
     {
-
-        
+        console.log('creating board')
 
         const { width, height } = this.scale
 
@@ -72,20 +71,29 @@ export default class Game extends Phaser.Scene
         })
         this.server?.onBoardChanged(this.handleBoardChanged, this)
 
+        this.server?.onNextTurn(this.handleNextTurn, this)
+
     }
 
-    private handleBoardChanged(board: number[])
+    private handleBoardChanged(location: number[])
     {
-        console.log('handle board changed')
-        let starSize = this.size - 16
-        for(let i = 0; i < board.length; ++i)
+        let starSize = this.size * 0.5 - 16
+
+        const cell = this.cells[location[1]]
+
+        if(cell.value === location[0])
         {
-            const cell = this.cells[i]
-            if(cell.value !== board[i])
-            {
-                cell.value = board[i]
-                this.add.star(cell.display.x, cell.display.y, 4, 12, starSize, 0xff0000)
-            }
+            return
         }
+
+        cell.value = location[0]
+        this.add.star(cell.display.x, cell.display.y, 4, 12, starSize, 0xff0000)
+            .setAngle(45)
+
+    }
+
+    private handleNextTurn()
+    {
+        console.log('NEXT TURN!')
     }
 }

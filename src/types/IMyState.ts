@@ -1,12 +1,13 @@
+import { Schema, ArraySchema } from '@colyseus/schema'
 export enum Cell{
     Empty,
     X,
     O
 }
 
-export interface IMyState
+export interface IMyState extends Schema
 {
-    board: Cell[]
+    board: ArraySchema<Cell>
 
     activePlayer: number
 }

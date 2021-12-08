@@ -10,7 +10,7 @@ export default class Server
 {
     private client: Client
     private events: Phaser.Events.EventEmitter
-    private room?: Room<IMyState & Schema>
+    private room?: Room<IMyState>
 
     constructor()
     {
@@ -23,14 +23,27 @@ export default class Server
 
     async join()
     {
-        this.room = await this.client.joinOrCreate<IMyState & Schema>('my_room')
+        this.room = await this.client.joinOrCreate<IMyState>('my_room')
         
         this.room.onStateChange.once(state => {
             this.events.emit('once-state-changed', state)
         })
 
-        this.room.state.board.onChange = () => {
-            this.events.emit('board-changed')
+        this.room.state.board.onChange = (value, key) => {
+            const location = [value, key]
+            this.events.emit('board-changed', location)
+        }
+
+        this.room.state.onChange = (changes) => {
+            changes.forEach(change => {
+                const { field, value } = change
+                switch (field)
+                {
+                    case 'activePlayer':
+                        this.events.emit('next-turn')
+                        break
+                }
+            })
         }
     }
 
@@ -50,9 +63,14 @@ export default class Server
         console.log("once state changed event triggered")
     }
 
-    onBoardChanged(cb: (board: number[]) => void, context?: any)
+    onBoardChanged(cb: (location: number[]) => void, context?: any)
     {
         console.log("on board changed event triggered")
         this.events.on('board-changed', cb, context)
+    }
+
+    onNextTurn(cb: (activePlayer: number) => void, context?: any)
+    {
+        this.events.on('next-turn', cb, context)
     }
 } 
