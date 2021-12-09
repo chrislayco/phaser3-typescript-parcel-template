@@ -11,6 +11,11 @@ export default class Server
     private client: Client
     private events: Phaser.Events.EventEmitter
     private room?: Room<IMyState>
+    private _playerIndex = -1
+
+    get playerIndex(){
+        return this._playerIndex
+    }
 
     constructor()
     {
@@ -20,11 +25,16 @@ export default class Server
 
     }
 
-
+ 
     async join()
     {
         this.room = await this.client.joinOrCreate<IMyState>('my_room')
         
+        this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
+            console.log(`player index: ${message.playerIndex}`)
+            this._playerIndex = message.playerIndex
+        })
+
         this.room.onStateChange.once(state => {
             this.events.emit('once-state-changed', state)
         })
@@ -54,13 +64,20 @@ export default class Server
             return
         }
 
+        if(this.playerIndex !== this.room.state.activePlayer)
+        {
+            console.warn('not this player\'s turn')
+
+            //console.log(`player index: this._playerIndex`)
+            return
+        }
+
         this.room.send(Message.PlayerSelection, {index: idx})
     }
 
     onceStateChanged(cb: (state: IMyState) => void, context?: any)
     {
         this.events.once('once-state-changed', cb, context)
-        console.log("once state changed event triggered")
     }
 
     onBoardChanged(cb: (location: number[]) => void, context?: any)

@@ -1,5 +1,5 @@
 import Phaser from "phaser"
-import IMyState, { Cell } from "~/types/IMyState"
+import IMyState, { Cell } from "../../types/IMyState"
 import type Server from '../services/Server'
 
 
@@ -46,10 +46,13 @@ export default class Game extends Phaser.Scene
         let startY = (height * 0.5) - this.size
         let x = startX
         let y = startY
+
+        let iconSize = this.size * 0.5 - 16
         
         let margin = 5
 
         state.board.forEach((cellState, idx) => {
+
             const cell = this.add.rectangle(x, y, this.size, this.size, 0xffffff)
                 .setInteractive()
                 .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
@@ -60,6 +63,17 @@ export default class Game extends Phaser.Scene
                 display: cell,
                 value: cellState
             })
+
+            switch(cellState){
+                case Cell.X:
+                    this.add.star(cell.x, cell.y, 4, 12, iconSize, 0xff0000)
+                        .setAngle(45)
+                    break
+    
+                case Cell.O:
+                    this.add.circle(cell.x, cell.y, iconSize - 8, 0x2EAFDB)
+                    break
+            }
 
             x += ( this.size + margin )
 
@@ -77,7 +91,7 @@ export default class Game extends Phaser.Scene
 
     private handleBoardChanged(location: number[])
     {
-        let starSize = this.size * 0.5 - 16
+        let iconSize = this.size * 0.5 - 16
 
         const cell = this.cells[location[1]]
 
@@ -87,8 +101,18 @@ export default class Game extends Phaser.Scene
         }
 
         cell.value = location[0]
-        this.add.star(cell.display.x, cell.display.y, 4, 12, starSize, 0xff0000)
-            .setAngle(45)
+
+        switch(cell.value){
+            case Cell.X:
+                this.add.star(cell.display.x, cell.display.y, 4, 12, iconSize, 0xff0000)
+                    .setAngle(45)
+                break
+
+            case Cell.O:
+                this.add.circle(cell.display.x, cell.display.y, iconSize - 8, 0x2EAFDB)
+                break
+        }
+        
 
     }
 

@@ -14,6 +14,7 @@ export class MyRoom extends Room<MyRoomState> {
 
     this.onMessage(Message.PlayerSelection, (client, message: {index: number}) => {
       //console.log(message)
+
       this.dispatcher.dispatch(new PlayerSelectionCommand(), {
         client,
         index: message.index
@@ -25,8 +26,8 @@ export class MyRoom extends Room<MyRoomState> {
   onJoin (client: Client, options: any) {
     console.log(client.sessionId, "joined!");
 
-
-
+    const idx = this.clients.findIndex(c => c.sessionId === client.sessionId)
+    client.send(Message.PlayerIndex, { playerIndex: idx})
   }
 
   onLeave (client: Client, consented: boolean) {
