@@ -52,6 +52,9 @@ export default class Server
                     case 'activePlayer':
                         this.events.emit('next-turn')
                         break
+                    case 'winnerPlayer':
+                        this.events.emit('win-player')
+                        break
                 }
             })
         }
@@ -89,5 +92,10 @@ export default class Server
     onNextTurn(cb: (activePlayer: number) => void, context?: any)
     {
         this.events.on('next-turn', cb, context)
+    }
+
+    onPlayerWin(cb: (winningPlayer: number) => void, context?: any)
+    {
+        this.events.on('win-player', cb, context)
     }
 } 

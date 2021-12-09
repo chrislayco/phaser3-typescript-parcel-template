@@ -9,6 +9,9 @@ export default class MyRoomState extends Schema implements IMyState
   @type('number')
   activePlayer = 0
 
+  @type('number')
+  winnerPlayer = -1
+
   constructor()
   {
     super()

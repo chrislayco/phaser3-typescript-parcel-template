@@ -83,9 +83,11 @@ export default class Game extends Phaser.Scene
                 x = startX
             }
         })
+        
         this.server?.onBoardChanged(this.handleBoardChanged, this)
-
         this.server?.onNextTurn(this.handleNextTurn, this)
+        this.server?.onPlayerWin(this.handlePlayerWin, this)
+
 
     }
 
@@ -119,5 +121,16 @@ export default class Game extends Phaser.Scene
     private handleNextTurn()
     {
         console.log('NEXT TURN!')
+    }
+
+    private handlePlayerWin(winningPlayer: number)
+    {
+        if(this.server?.playerIndex === winningPlayer){
+            console.log('you win')
+        }
+        else{
+            console.log('you lose')
+        }
+        
     }
 }
