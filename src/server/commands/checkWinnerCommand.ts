@@ -38,21 +38,12 @@ export default class CheckWinnerCommand extends Command<IMyRoomState, Payload>
             let val1 = this.getValueAt(win[0].row, win[0].col)
             let val2 = this.getValueAt(win[1].row, win[1].col)
             let val3 = this.getValueAt(win[2].row, win[2].col)
-            console.log('huh')
-            // console.log(val1)
-            // console.log(val2)
-            // console.log(val3)
+
 
             if(val1 !== Cell.Empty && val1 == val2 && val1 == val3){
-                console.log('winner????')
                 return true
             }
-            else{
-                console.log('not a winner')
-            }
         }
-
-        console.log('winner not found')
         return false
     }
     
@@ -63,6 +54,7 @@ export default class CheckWinnerCommand extends Command<IMyRoomState, Payload>
         if(win)
         {
             this.room.state.winnerPlayer = this.room.state.activePlayer
+            console.log(`winner: ${this.room.state.winnerPlayer}`)
         }
         else
         {

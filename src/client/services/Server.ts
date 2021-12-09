@@ -50,10 +50,10 @@ export default class Server
                 switch (field)
                 {
                     case 'activePlayer':
-                        this.events.emit('next-turn')
+                        this.events.emit('next-turn', value)
                         break
                     case 'winnerPlayer':
-                        this.events.emit('win-player')
+                        this.events.emit('win-player', value)
                         break
                 }
             })
@@ -85,7 +85,6 @@ export default class Server
 
     onBoardChanged(cb: (location: number[]) => void, context?: any)
     {
-        console.log("on board changed event triggered")
         this.events.on('board-changed', cb, context)
     }
 

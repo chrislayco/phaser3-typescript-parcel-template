@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+import { IGameOverSceneData, IGameSceneData } from "~/types/scenes"
 import IMyState, { Cell } from "../../types/IMyState"
 import type Server from '../services/Server'
 
@@ -6,7 +7,8 @@ import type Server from '../services/Server'
 
 export default class Game extends Phaser.Scene
 {
-    server?: Server
+    private server?: Server
+    private onGameOver?: (data: IGameOverSceneData) => void
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[] = [] 
 
     private size: number
@@ -18,13 +20,14 @@ export default class Game extends Phaser.Scene
         this.size = 128
     }
 
-    async create(data: {server: Server})
+    async create(data: IGameSceneData)
     {
         console.log('game scene')
 
-        const { server } = data
+        const { server, onGameOver } = data
 
         this.server = server
+        this.onGameOver = onGameOver
 
         if(!this.server)
         {
@@ -118,19 +121,25 @@ export default class Game extends Phaser.Scene
 
     }
 
-    private handleNextTurn()
+    private handleNextTurn(playerIndex: Object)
     {
-        console.log('NEXT TURN!')
+        //console.log('NEXT TURN!')
+        console.log(`turn: ${playerIndex}`)
     }
 
-    private handlePlayerWin(winningPlayer: number)
+    private handlePlayerWin(playerIndex: number)
     {
-        if(this.server?.playerIndex === winningPlayer){
-            console.log('you win')
+        if(!this.onGameOver)
+        {
+            return
         }
-        else{
-            console.log('you lose')
-        }
-        
+
+        this.onGameOver({
+            winner: this.server?.playerIndex == playerIndex
+            
+        })
+       
     }
+
+    
 }
