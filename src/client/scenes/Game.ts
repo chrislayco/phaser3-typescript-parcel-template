@@ -1,6 +1,6 @@
 import Phaser from "phaser"
 import { IGameOverSceneData, IGameSceneData } from "~/types/scenes"
-import IMyState, { Cell } from "../../types/IMyState"
+import IMyState, { Cell, GameState } from "../../types/IMyState"
 import type Server from '../services/Server'
 
 
@@ -12,6 +12,7 @@ export default class Game extends Phaser.Scene
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[] = [] 
 
     private size: number
+    private gameStateText: Phaser.GameObjects.Text
 
     constructor()
     {
@@ -29,12 +30,16 @@ export default class Game extends Phaser.Scene
         this.server = server
         this.onGameOver = onGameOver
 
+        const width = this.scale.width
+        this.gameStateText = this.add.text(width * 0.5, 50, 'waiting for opponent...')
+            .setOrigin(0.5)
+
         if(!this.server)
         {
             throw new Error('no server instance')
         }
 
-        await server.join()
+        await server.join() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
 
         server.onceStateChanged(this.createBoard, this)
     }
@@ -86,12 +91,35 @@ export default class Game extends Phaser.Scene
                 x = startX
             }
         })
+
+        if(this.server?.gameState === GameState.Waiting)
+        {
+            const width = this.scale.width
+            this.gameStateText.setText('waiting for players')
+        }
+
+
+        
         
         this.server?.onBoardChanged(this.handleBoardChanged, this)
         this.server?.onNextTurn(this.handleNextTurn, this)
         this.server?.onPlayerWin(this.handlePlayerWin, this)
+        this.server?.onGameStateChanged(this.handleGameStateChanged, this)
 
+        
+    }
 
+    private initializeTurnText()
+    {
+        console.log(`playerindex in init: ${this.server?.playerIndex}`)
+        if(this.server?.playerIndex === 0)
+        {
+            this.gameStateText.setText('your turn')
+        }
+        else
+        {
+            this.gameStateText.setText('opponent\'s turn')
+        }
     }
 
     private handleBoardChanged(location: number[])
@@ -124,7 +152,19 @@ export default class Game extends Phaser.Scene
     private handleNextTurn(playerIndex: Object)
     {
         //console.log('NEXT TURN!')
-        console.log(`turn: ${playerIndex}`)
+        //console.log(`turn: ${playerIndex}`)
+
+        
+
+        if(this.server?.playerIndex === playerIndex)
+        {
+            this.gameStateText.setText('your turn')
+        }
+        else
+        {
+            this.gameStateText.setText('opponent\'s turn')
+        }
+        
     }
 
     private handlePlayerWin(playerIndex: number)
@@ -136,9 +176,23 @@ export default class Game extends Phaser.Scene
 
         this.onGameOver({
             winner: this.server?.playerIndex == playerIndex
-            
         })
        
+    }
+
+    private handleGameStateChanged(state: GameState)
+    {
+        if(this.gameStateText && state === GameState.Waiting)
+        {
+            this.gameStateText.setText('waiting for players')
+        }
+        if(state === GameState.Playing){
+            console.log('the game is now playing')
+        }
+        else if(state === GameState.Finished){
+            this.gameStateText.destroy()
+            this.gameStateText = null
+        }
     }
 
     

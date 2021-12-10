@@ -2,8 +2,10 @@ import { Client, Room } from "colyseus.js"
 import { Schema } from "@colyseus/schema"
 import { EventEmitter } from "colyseus.js/lib/core/signal"
 import Phaser from 'phaser'
-import { IMyState } from "~/types/IMyState"
+import { IMyState } from "../../types/IMyState"
+import { GameState } from "../../types/IMyState"
 import { Message } from "../../types/messages"
+
 
 
 export default class Server
@@ -15,6 +17,17 @@ export default class Server
 
     get playerIndex(){
         return this._playerIndex
+    }
+
+    get gameState()
+    {
+        if(!this.room)
+        {
+            return GameState.Waiting
+            
+        }
+
+        return this.room?.state.gameState
     }
 
     constructor()
@@ -55,10 +68,19 @@ export default class Server
                     case 'winnerPlayer':
                         this.events.emit('win-player', value)
                         break
+                    case 'gameState':
+                        this.events.emit('game-state-changed', value)
                 }
             })
         }
     }
+
+    leave()
+    {
+        this.room?.leave()
+        this.events.removeAllListeners()
+    }
+    
 
     makeSelection(idx: number)
     {
@@ -96,5 +118,10 @@ export default class Server
     onPlayerWin(cb: (winningPlayer: number) => void, context?: any)
     {
         this.events.on('win-player', cb, context)
+    }
+
+    onGameStateChanged(cb: (state: GameState) => void, context?: any)
+    {
+        this.events.on('game-state-changed', cb, context)
     }
 } 

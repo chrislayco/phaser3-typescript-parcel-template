@@ -18,12 +18,33 @@ export default class Bootstrap extends Phaser.Scene
     create()
     {
         console.log('bootstrap scene')
+        this.createNewGame()
+    }
+
+    private createNewGame()
+    {
+        console.log('creating a game')
         this.scene.launch('game', {
             server: this.server,
-            onGameOver: (data: IGameOverSceneData) => {
-                this.scene.stop('game')
-                this.scene.launch('game-over', data)
-            } 
+            onGameOver: this.handleGameOver
         })
     }
+
+    private handleRestart = () => {
+        this.scene.stop('game-over')
+        this.createNewGame()
+    }
+
+    private handleGameOver = (data: {IGameOverSceneData}) => {
+        this.server.leave()
+        this.scene.stop('game')
+
+        this.scene.launch('game-over', {
+            ...data,
+            onRestart: this.handleRestart
+        })
+    }
+
+    
+
 }

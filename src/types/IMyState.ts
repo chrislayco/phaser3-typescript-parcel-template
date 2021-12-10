@@ -5,8 +5,16 @@ export enum Cell{
     O
 }
 
+export enum GameState{
+    Waiting,
+    Playing,
+    Finished
+}
+
 export interface IMyState extends Schema
 {
+    gameState: GameState
+
     board: ArraySchema<Cell>
 
     activePlayer: number

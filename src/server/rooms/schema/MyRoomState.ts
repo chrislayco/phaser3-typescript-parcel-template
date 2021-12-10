@@ -1,8 +1,11 @@
 import { Schema, Context, ArraySchema, type } from "@colyseus/schema"
-import IMyState, { Cell } from '../../../types/IMyState'
+import IMyState, { Cell, GameState } from '../../../types/IMyState'
 
 export default class MyRoomState extends Schema implements IMyState
 {
+  @type('number')
+  gameState = GameState.Waiting
+
   @type(['number'])
   board: ArraySchema<number>
 
