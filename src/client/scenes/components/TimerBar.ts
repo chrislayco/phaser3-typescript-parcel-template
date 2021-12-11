@@ -49,14 +49,19 @@ export default class TimerBar
     }
 
 
-    startTimer()
+    resetAndStartTimer()
     {
         //this.bar.scaleX = 
         console.log('starting timer')
         this.timerTween.play()
-
         
     }
 
-
+    hideTimer()
+    {
+        console.log('stopping timer')
+        this.timerTween.seek(1)
+        this.timerTween.stop()
+        //this.timerTween.seek(0)
+    }
 }

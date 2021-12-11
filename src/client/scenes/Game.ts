@@ -152,12 +152,16 @@ export default class Game extends Phaser.Scene
         {
             this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
             this.gameStateText.setText('your turn')
+            this.timerBar.resetAndStartTimer()
         }
         else
         {
             this.add.text(width, 70, 'you are: O', ).setOrigin(0.5)
             this.gameStateText.setText('opponent\'s turn')
+            this.timerBar.hideTimer()
         }
+
+        
     }
 
 
@@ -192,19 +196,20 @@ export default class Game extends Phaser.Scene
 
     private handleNextTurn(playerIndex: Object)
     {
-        //console.log('NEXT TURN!')
-        console.log(`turn: ${playerIndex}`)
-        this.printBoardFromGame()
+        //console.log(`turn: ${playerIndex}`)
+        //this.printBoardFromGame()
 
-        this.timerBar.startTimer()
+        
 
         if(this.server?.playerIndex === playerIndex)
         {
             this.gameStateText.setText('your turn')
+            this.timerBar.resetAndStartTimer()
         }
         else
         {
             this.gameStateText.setText('opponent\'s turn')
+            this.timerBar.hideTimer()
         }
         
     }
