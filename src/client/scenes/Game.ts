@@ -2,6 +2,7 @@ import Phaser from "phaser"
 import { IGameOverSceneData, IGameSceneData } from "~/types/scenes"
 import IMyState, { Cell, GameState } from "../../types/IMyState"
 import type Server from '../services/Server'
+import TimerBar from "./components/TimerBar"
 
 
 
@@ -10,6 +11,7 @@ export default class Game extends Phaser.Scene
     private server?: Server
     private onGameOver?: (data: IGameOverSceneData) => void
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[]
+    private timerBar: TimerBar
 
     private size: number
     private gameStateText: Phaser.GameObjects.Text
@@ -21,6 +23,8 @@ export default class Game extends Phaser.Scene
         this.size = 128
 
         this.cells = []
+
+
     }
 
     async create(data: IGameSceneData)
@@ -105,7 +109,29 @@ export default class Game extends Phaser.Scene
         this.server?.onNextTurn(this.handleNextTurn, this)
         this.server?.onPlayerWin(this.handlePlayerWin, this)
         this.server?.onGameStateChanged(this.handleGameStateChanged, this)
+
+        this.initializeUI()
+
     }
+
+    private initializeUI()
+    {
+        const { width, height } = this.scale
+        this.timerBar = new TimerBar(this, this.onTimerFinish, width * 0.5, 650) //.withRectangle(this.add.rectangle(200, 200, 800, 20, 0xffffff))
+
+    }
+
+    private onTimerFinish = () => 
+    {
+        console.log('timer done!')
+    }
+
+    private onTimerStart = () =>
+    {
+
+    }
+
+    
 
     private printBoardFromGame()
     {
@@ -169,6 +195,8 @@ export default class Game extends Phaser.Scene
         //console.log('NEXT TURN!')
         console.log(`turn: ${playerIndex}`)
         this.printBoardFromGame()
+
+        this.timerBar.startTimer()
 
         if(this.server?.playerIndex === playerIndex)
         {
