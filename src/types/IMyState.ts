@@ -20,6 +20,7 @@ export interface IMyState extends Schema
     activePlayer: number
 
     winnerPlayer: number
+
 }
 
 export default IMyState

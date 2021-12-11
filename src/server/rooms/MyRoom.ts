@@ -10,16 +10,19 @@ export class MyRoom extends Room<MyRoomState> {
   
   private dispatcher = new Dispatcher(this)
 
+  private firstPlayer = -1
+
   onCreate (options: any) {
     this.maxClients = 2
     this.setState(new MyRoomState());
 
-    this.onMessage(Message.PlayerSelection, (client, message: {index: number}) => {
+    this.onMessage(Message.PlayerSelection, (client, message: {index: number, playerIndex: number}) => {
       //console.log(message)
 
       this.dispatcher.dispatch(new PlayerSelectionCommand(), {
         client,
-        index: message.index
+        index: message.index,
+        playerIndex: message.playerIndex
       })
     })
 
@@ -27,13 +30,20 @@ export class MyRoom extends Room<MyRoomState> {
 
   onJoin (client: Client, options: any) {
     console.log(client.sessionId, "joined!");
+ 
+    //instead of assigning index on join, assign when 2 players are present, randomly
 
-    const idx = this.clients.findIndex(c => c.sessionId === client.sessionId)
-    client.send(Message.PlayerIndex, { playerIndex: idx})
-
-    if (this.clients.length >= 2)
+    if (this.clients.length == 2)
     {
       this.state.gameState = GameState.Playing
+
+      const idx0 = Math.round(Math.random())
+      const idx1 = idx0 === 1 ? 0 : 1
+
+      this.clients[0].send(Message.PlayerIndex, { playerIndex: idx0})
+      this.clients[1].send(Message.PlayerIndex, { playerIndex: idx1})
+
+      this.state.activePlayer = 0
     }
   }
 

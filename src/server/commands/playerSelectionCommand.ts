@@ -7,17 +7,20 @@ import NextTurnCommand from './nextTurnCommand'
 type Payload = {
     client: Client
     index: number
+    playerIndex: number
 }
 
 export default class PlayerSelectionCommand extends Command<IMyState, Payload>
 {
     execute(data: Payload)
     {
-        const {client, index } = data
-        const clientIndex = this.room.clients.findIndex(c => c.id === client.id)
-        const cellValue = clientIndex === 0 ? Cell.X : Cell.O
+        const {client, index, playerIndex } = data
+
+        const cellValue = playerIndex === 0 ? Cell.X : Cell.O
+        
         this.room.state.board[index] = cellValue
 
+        this.printBoard()
 
         return [
             new CheckWinnerCommand()
@@ -26,5 +29,13 @@ export default class PlayerSelectionCommand extends Command<IMyState, Payload>
         // this.room.state.board.forEach(cellValue => {
         //     console.log(cellValue)
         // })
+    }
+
+    private printBoard()
+    {
+        console.log('---------')
+        console.log('%d %d %d', this.room.state.board[0], this.room.state.board[1], this.room.state.board[2])
+        console.log('%d %d %d', this.room.state.board[3], this.room.state.board[4], this.room.state.board[5])
+        console.log('%d %d %d', this.room.state.board[6], this.room.state.board[7], this.room.state.board[8])
     }
 }

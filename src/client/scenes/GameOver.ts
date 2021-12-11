@@ -23,11 +23,7 @@ export default class GameOver extends Phaser.Scene
 
         this.add.text(width * 0.5, height * 0.5 + 100, 'press space to play again', { fontSize: '36px'})
             .setOrigin(0.5)
-
-        console.log('the data: ')
-        console.log(data)
         
-
         this.input.keyboard.once('keyup-SPACE', () => {
             console.log('pressed!')
             if(data.onRestart)

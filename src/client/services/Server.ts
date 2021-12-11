@@ -46,6 +46,9 @@ export default class Server
         this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
             console.log(`player index: ${message.playerIndex}`)
             this._playerIndex = message.playerIndex
+            //initialize text
+            this.events.emit('game-start')
+            
         })
 
         this.room.onStateChange.once(state => {
@@ -97,12 +100,17 @@ export default class Server
             return
         }
 
-        this.room.send(Message.PlayerSelection, {index: idx})
+        this.room.send(Message.PlayerSelection, {index: idx, playerIndex: this.playerIndex})
     }
 
     onceStateChanged(cb: (state: IMyState) => void, context?: any)
     {
         this.events.once('once-state-changed', cb, context)
+    }
+
+    onGameStart(cb: () => void, context?: any)
+    {
+        this.events.on('game-start', cb, context)
     }
 
     onBoardChanged(cb: (location: number[]) => void, context?: any)

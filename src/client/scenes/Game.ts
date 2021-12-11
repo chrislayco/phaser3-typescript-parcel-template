@@ -9,7 +9,7 @@ export default class Game extends Phaser.Scene
 {
     private server?: Server
     private onGameOver?: (data: IGameOverSceneData) => void
-    private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[] = [] 
+    private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[]
 
     private size: number
     private gameStateText: Phaser.GameObjects.Text
@@ -19,6 +19,8 @@ export default class Game extends Phaser.Scene
         super('game')
 
         this.size = 128
+
+        this.cells = []
     }
 
     async create(data: IGameSceneData)
@@ -95,36 +97,49 @@ export default class Game extends Phaser.Scene
         if(this.server?.gameState === GameState.Waiting)
         {
             const width = this.scale.width
-            this.gameStateText.setText('waiting for players')
+            this.gameStateText.setText('waiting for players...')
         }
 
-
-        
-        
+        this.server?.onGameStart(this.beginGame, this)
         this.server?.onBoardChanged(this.handleBoardChanged, this)
         this.server?.onNextTurn(this.handleNextTurn, this)
         this.server?.onPlayerWin(this.handlePlayerWin, this)
         this.server?.onGameStateChanged(this.handleGameStateChanged, this)
-
-        
     }
 
-    private initializeTurnText()
+    private printBoardFromGame()
     {
-        console.log(`playerindex in init: ${this.server?.playerIndex}`)
+        console.log(`${this.cells[0].value} ${this.cells[1].value} ${this.cells[2].value}`)
+        console.log(`${this.cells[3].value} ${this.cells[4].value} ${this.cells[5].value}`)
+        console.log(`${this.cells[6].value} ${this.cells[7].value} ${this.cells[8].value}`)
+    }
+
+    private beginGame()
+    {
+        console.log('beginning game')
+        console.log(this.server?.playerIndex)
+
+        const width = this.scale.width * 0.5
+        
+
         if(this.server?.playerIndex === 0)
         {
+            this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
             this.gameStateText.setText('your turn')
         }
         else
         {
+            this.add.text(width, 70, 'you are: O', ).setOrigin(0.5)
             this.gameStateText.setText('opponent\'s turn')
         }
     }
 
+
     private handleBoardChanged(location: number[])
     {
         let iconSize = this.size * 0.5 - 16
+
+        //console.log('handle board changed called with %d %d', location[0], location[1])
 
         const cell = this.cells[location[1]]
 
@@ -152,9 +167,8 @@ export default class Game extends Phaser.Scene
     private handleNextTurn(playerIndex: Object)
     {
         //console.log('NEXT TURN!')
-        //console.log(`turn: ${playerIndex}`)
-
-        
+        console.log(`turn: ${playerIndex}`)
+        this.printBoardFromGame()
 
         if(this.server?.playerIndex === playerIndex)
         {
@@ -174,6 +188,7 @@ export default class Game extends Phaser.Scene
             return
         }
 
+        this.cells = []
         this.onGameOver({
             winner: this.server?.playerIndex == playerIndex
         })
@@ -184,12 +199,13 @@ export default class Game extends Phaser.Scene
     {
         if(this.gameStateText && state === GameState.Waiting)
         {
-            this.gameStateText.setText('waiting for players')
+            this.gameStateText.setText('waiting for players...')
         }
         if(state === GameState.Playing){
             console.log('the game is now playing')
         }
         else if(state === GameState.Finished){
+            console.log('resetting')
             this.gameStateText.destroy()
             this.gameStateText = null
         }

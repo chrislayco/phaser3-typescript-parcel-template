@@ -10,7 +10,7 @@ export default class MyRoomState extends Schema implements IMyState
   board: ArraySchema<number>
 
   @type('number')
-  activePlayer = 0
+  activePlayer = -1
 
   @type('number')
   winnerPlayer = -1
