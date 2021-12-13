@@ -53,15 +53,21 @@ export default class TimerBar
     {
         //this.bar.scaleX = 
         console.log('starting timer')
+        //this.timerTween.seek(0)
+        this.bar.visible = true
         this.timerTween.play()
         
     }
 
     hideTimer()
     {
-        console.log('stopping timer')
-        this.timerTween.seek(1)
-        this.timerTween.stop()
-        //this.timerTween.seek(0)
+        if(this.timerTween.isPlaying()){
+            this.timerTween.seek(0)  
+            this.timerTween.stop()
+        }
+        //console.log('stopping timer')
+        //this.timerTween.seek(1)
+        //this.bar.visible = false
+        //this.timerTween.stop()
     }
 }

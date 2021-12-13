@@ -34,8 +34,6 @@ export default class Server
     {
         this.client = new Client('ws://localhost:2567')
         this.events = new Phaser.Events.EventEmitter()
-        console.log(this.client)
-
     }
 
  
@@ -44,7 +42,6 @@ export default class Server
         this.room = await this.client.joinOrCreate<IMyState>('my_room')
         
         this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
-            console.log(`player index: ${message.playerIndex}`)
             this._playerIndex = message.playerIndex
             //initialize text
             this.events.emit('game-start')

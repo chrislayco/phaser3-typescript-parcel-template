@@ -29,7 +29,6 @@ export default class Game extends Phaser.Scene
 
     async create(data: IGameSceneData)
     {
-        console.log('game scene')
 
         const { server, onGameOver } = data
 
@@ -52,7 +51,6 @@ export default class Game extends Phaser.Scene
 
     private createBoard(state: IMyState)
     {
-        console.log('creating board')
 
         const { width, height } = this.scale
 
@@ -142,7 +140,6 @@ export default class Game extends Phaser.Scene
 
     private beginGame()
     {
-        console.log('beginning game')
         console.log(this.server?.playerIndex)
 
         const width = this.scale.width * 0.5
@@ -238,7 +235,6 @@ export default class Game extends Phaser.Scene
             console.log('the game is now playing')
         }
         else if(state === GameState.Finished){
-            console.log('resetting')
             this.gameStateText.destroy()
             this.gameStateText = null
         }

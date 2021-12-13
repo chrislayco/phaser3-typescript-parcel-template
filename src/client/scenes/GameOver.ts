@@ -25,7 +25,6 @@ export default class GameOver extends Phaser.Scene
             .setOrigin(0.5)
         
         this.input.keyboard.once('keyup-SPACE', () => {
-            console.log('pressed!')
             if(data.onRestart)
             {
                 data.onRestart()
