@@ -106,7 +106,7 @@ export default class Game extends Phaser.Scene
 
         this.server?.onGameStart(this.beginGame, this)
         this.server?.onBoardChanged(this.handleBoardChanged, this)
-        this.server?.onNextTurn(this.handleNextTurn, this)
+        
         this.server?.onPlayerWin(this.handlePlayerWin, this)
         this.server?.onGameStateChanged(this.handleGameStateChanged, this)
 
@@ -150,6 +150,8 @@ export default class Game extends Phaser.Scene
             this.gameStateText.setText('opponent\'s turn')
             this.timerBar.hideTimer()
         }   
+
+        this.server?.onNextTurn(this.handleNextTurn, this)
     }
 
 
@@ -184,7 +186,7 @@ export default class Game extends Phaser.Scene
 
     private handleNextTurn(playerIndex: Object)
     {
-        //console.log(`turn: ${playerIndex}`)
+        console.log(`turn: ${playerIndex}`)
         //this.printBoardFromGame()
 
         
