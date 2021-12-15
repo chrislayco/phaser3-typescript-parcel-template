@@ -46,14 +46,7 @@ export default class Game extends Phaser.Scene
 
         await server.join() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
 
-        //server.onceStateChanged(this.createBoard, this)
-
-
-        this.timerBar = new TimerBar(this, width * 0.5, 650) 
-        
-        this.add.existing(this.timerBar)
-
-        
+        server.onceStateChanged(this.createBoard, this)
     }
 
     private createBoard(state: IMyState)
@@ -123,10 +116,7 @@ export default class Game extends Phaser.Scene
     private initializeUI()
     {
         const { width, height } = this.scale
-        console.log('initializing ui')
-        
-
-        console.log(this.timerBar)
+        this.timerBar = new TimerBar(this, this.onTimerFinish, width * 0.5, 650) 
     }
 
     private onTimerFinish = () => 
