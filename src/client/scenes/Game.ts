@@ -68,7 +68,7 @@ export default class Game extends Phaser.Scene
             const cell = this.add.rectangle(x, y, this.size, this.size, 0xffffff)
                 .setInteractive()
                 .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                    this.server?.makeSelection(idx)
+                    this.makeSelection(idx)
                 })
             
             this.cells.push({
@@ -124,12 +124,16 @@ export default class Game extends Phaser.Scene
         console.log('timer done!')
     }
 
-    private onTimerStart = () =>
-    {
+    private makeSelection = (idx: number) => {
 
+        console.log('checking')
+        if(this.cells[idx].value === Cell.Empty)
+        {
+            this.server?.makeSelection(idx)
+        }
+        return
+        
     }
-
-    
 
     private printBoardFromGame()
     {

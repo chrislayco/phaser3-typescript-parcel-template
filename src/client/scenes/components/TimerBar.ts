@@ -51,9 +51,7 @@ export default class TimerBar
 
     resetAndStartTimer()
     {
-        //this.bar.scaleX = 
         console.log('starting timer')
-        //this.timerTween.seek(0)
         this.bar.visible = true
         this.timerTween.play()
         
@@ -65,9 +63,6 @@ export default class TimerBar
             this.timerTween.seek(0)  
             this.timerTween.stop()
         }
-        //console.log('stopping timer')
-        //this.timerTween.seek(1)
-        //this.bar.visible = false
-        //this.timerTween.stop()
+
     }
 }
