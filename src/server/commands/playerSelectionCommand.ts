@@ -18,17 +18,17 @@ export default class PlayerSelectionCommand extends Command<IMyState, Payload>
 
         const cellValue = playerIndex === 0 ? Cell.X : Cell.O
         
-        this.room.state.board[index] = cellValue
+        if(this.room.state.board[index] === Cell.Empty)
+        {
+            this.room.state.board[index] = cellValue
+            return [
+                new CheckWinnerCommand()
+            ]
+        }
+        return
+    
+        //this.printBoard()
 
-        this.printBoard()
-
-        return [
-            new CheckWinnerCommand()
-        ]
-
-        // this.room.state.board.forEach(cellValue => {
-        //     console.log(cellValue)
-        // })
     }
 
     private printBoard()
