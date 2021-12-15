@@ -72,8 +72,7 @@ export default class Game extends Phaser.Scene
                         this.server?.makeSelection(idx)
                     }
                 )
-                
-                     
+                            
             this.cells.push({
                 display: cell,
                 value: cellState
@@ -112,22 +111,18 @@ export default class Game extends Phaser.Scene
         this.server?.onGameStateChanged(this.handleGameStateChanged, this)
 
         this.initializeUI()
-
     }
 
     private initializeUI()
     {
         const { width, height } = this.scale
-        this.timerBar = new TimerBar(this, this.onTimerFinish, width * 0.5, 650) //.withRectangle(this.add.rectangle(200, 200, 800, 20, 0xffffff))
-
+        this.timerBar = new TimerBar(this, this.onTimerFinish, width * 0.5, 650) 
     }
 
     private onTimerFinish = () => 
     {
         console.log('timer done!')
     }
-
-
 
     private printBoardFromGame()
     {
@@ -142,7 +137,6 @@ export default class Game extends Phaser.Scene
 
         const width = this.scale.width * 0.5
         
-
         if(this.server?.playerIndex === 0)
         {
             this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
@@ -154,9 +148,7 @@ export default class Game extends Phaser.Scene
             this.add.text(width, 70, 'you are: O', ).setOrigin(0.5)
             this.gameStateText.setText('opponent\'s turn')
             this.timerBar.hideTimer()
-        }
-
-        
+        }   
     }
 
 

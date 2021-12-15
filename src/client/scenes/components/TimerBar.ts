@@ -2,13 +2,13 @@ import Phaser from 'phaser'
 import GameOver from '../GameOver'
 import { Tweens } from 'phaser'
 
-export default class TimerBar 
+export default class TimerBar extends Phaser.GameObjects.Container
 {
     private scene: Phaser.Scene
+    private container: Phaser.GameObjects.Container
     private bar: Phaser.GameObjects.Rectangle
-    private scaleX: number
-    private x: number
-    private y: number
+    private barLength: number
+    private rt: Phaser.GameObjects.RenderTexture
 
     private timerTween: Phaser.Tweens.Tween
 
@@ -16,27 +16,17 @@ export default class TimerBar
 
     constructor(scene: Phaser.Scene, onComplete: () => (void), x: number, y: number)
     {
+        console.log('timer bar created')
         this.scene = scene
-        this.x = x
-        this.y = y
+        
+        this.container = new Phaser.GameObjects.Container(this.scene, 100, 100)
 
         this.onComplete = onComplete
         
-        this.createTimerBar()
-
+        //might not need this
+        this.barLength = this.scene.scale.width - 100
         
-    }
-
-    private createTimerBar()
-    {
-        console.log('creating bar')
-
-        //this.bar = new Phaser.GameObjects.Rectangle(this.scene, 10, 600, 700, 10, 0xffffff)
-
-        let width = this.scene.scale.width - 100
-        let x = this.x - width * 0.5
-
-        this.bar = this.scene.add.rectangle(x, this.y, this.scene.scale.width - 100, 10, 0xffffff)
+        this.bar = new Phaser.GameObjects.Rectangle(this.scene, 10, 10, 600, 600, 0xffffff)
             .setOrigin(0)
 
         this.timerTween = this.scene.tweens.create({
@@ -46,8 +36,12 @@ export default class TimerBar
             onComplete: this.onComplete
         })
 
-    }
 
+        this.rt = this.scene.add.renderTexture(x, y)
+        this.container.add(this.bar)
+
+        
+    }
 
     resetAndStartTimer()
     {
