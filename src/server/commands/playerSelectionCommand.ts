@@ -16,6 +16,11 @@ export default class PlayerSelectionCommand extends Command<IMyState, Payload>
     {
         const {client, index, playerIndex } = data
 
+        if(index === -1)
+        {
+            return new NextTurnCommand()
+        }
+
         const cellValue = playerIndex === 0 ? Cell.X : Cell.O
         
         if(this.room.state.board[index] === Cell.Empty)

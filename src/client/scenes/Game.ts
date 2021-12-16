@@ -120,12 +120,13 @@ export default class Game extends Phaser.Scene
     {
         
         const { width, height } = this.scale
-        this.timerBar = new TimerBar(this, width * 0.5, 700) 
+        this.timerBar = new TimerBar(this, this.onTimerFinish, width * 0.5, 700) 
         this.add.existing(this.timerBar)
     }
 
     private onTimerFinish = () => 
     {
+        this.server?.makeSelection(-1)
         console.log('timer done!')
     }
 
@@ -189,6 +190,8 @@ export default class Game extends Phaser.Scene
         
 
     }
+
+    
 
     private handleNextTurn(playerIndex: Object)
     {

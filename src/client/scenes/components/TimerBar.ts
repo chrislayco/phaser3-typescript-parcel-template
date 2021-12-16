@@ -16,11 +16,12 @@ export default class TimerBar extends Phaser.GameObjects.Container
 
     private onComplete: () => (void)
 
-    constructor(scene: Phaser.Scene, x: number, y: number, duration?: number)
+    constructor(scene: Phaser.Scene, onComplete: () => (void), x: number, y: number, duration?: number)
     {
         super(scene, x, y)
 
         this.scene = scene
+        this.onComplete = onComplete
         
         this.bar = this.scene.add.rectangle(0, 0, Math.floor(this.scene.scale.width * 0.9), 15, 0xffffff)
         this.text = this.scene.add.text(0, -20, this.textValue).setOrigin(0.5)
