@@ -127,7 +127,7 @@ export default class Game extends Phaser.Scene
     private onTimerFinish = () => 
     {
         this.server?.makeSelection(-1)
-        console.log('timer done!')
+        //console.log('timer done!')
     }
 
     private printBoardFromGame()

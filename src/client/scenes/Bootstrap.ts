@@ -19,7 +19,8 @@ export default class Bootstrap extends Phaser.Scene
 
     create()
     {
-        this.createNewGame()
+        //this.createNewGame()
+        this.scene.launch('landing-page')
     }
 
     private createNewGame()
