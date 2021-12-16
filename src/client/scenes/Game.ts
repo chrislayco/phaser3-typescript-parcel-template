@@ -209,7 +209,7 @@ export default class Game extends Phaser.Scene
         
     }
 
-    private handlePlayerWin(playerIndex: number)
+    private handlePlayerWin(winningPlayer: number)
     {
         if(!this.onGameOver)
         {
@@ -221,9 +221,27 @@ export default class Game extends Phaser.Scene
         this.time.clearPendingEvents()
         this.timerBar.destroy()
 
-        this.onGameOver({
-            winner: this.server?.playerIndex == playerIndex
-        })
+        if(winningPlayer === this.server?.playerIndex)
+        {
+            //winner
+            this.onGameOver({
+                winner: 1
+            })
+        }
+        else if(winningPlayer === -2)
+        {
+            //tie
+            this.onGameOver({
+                winner: 0
+            })
+        }
+        else{
+            //lose
+            this.onGameOver({
+                winner: -1
+            })
+        }
+        
        
     }
 

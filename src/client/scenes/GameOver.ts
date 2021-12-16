@@ -2,6 +2,7 @@
 import Phaser from "phaser"
 import { IGameOverSceneData, IGameSceneData } from "../../types/scenes"
 
+
 export default class GameOver extends Phaser.Scene
 {
     private onRestart?: (data: IGameOverSceneData) => void
@@ -12,9 +13,20 @@ export default class GameOver extends Phaser.Scene
 
     create(data: IGameOverSceneData)
     {
-        const text = data.winner
-            ? 'you won'
-            : 'you lost'
+        let text = ''
+
+        switch(data.winner)
+        {
+            case -1:
+                text = 'you lose'
+                break
+            case 0:
+                text = 'tie'
+                break
+            case 1:
+                text = 'you win'
+                break
+        }
 
 
         const { width, height } = this.scale

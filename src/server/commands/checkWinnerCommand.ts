@@ -86,6 +86,7 @@ export default class CheckWinnerCommand extends Command<IMyRoomState, Payload>
                 break
 
             case(Outcomes.Tie):
+                this.room.state.winnerPlayer = -2
                 console.log('tied')
 
             case(Outcomes.None):
