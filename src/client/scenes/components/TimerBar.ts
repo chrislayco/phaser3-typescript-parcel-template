@@ -60,6 +60,7 @@ export default class TimerBar extends Phaser.GameObjects.Container
 
     resetAndStartTimer()
     {
+        console.log('starting timer')
         this.bar.visible = true
         this.timerTween.play()
         

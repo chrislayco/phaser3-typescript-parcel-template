@@ -12,6 +12,7 @@ export default class Game extends Phaser.Scene
     private onGameOver?: (data: IGameOverSceneData) => void
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[]
     private timerBar: TimerBar
+    private gameStarted: boolean
 
     private size: number
     private gameStateText: Phaser.GameObjects.Text
@@ -34,6 +35,8 @@ export default class Game extends Phaser.Scene
 
         this.server = server
         this.onGameOver = onGameOver
+
+        this.gameStarted = false
 
         const width = this.scale.width
         this.gameStateText = this.add.text(width * 0.5, 50, 'waiting for opponent...')
@@ -106,7 +109,7 @@ export default class Game extends Phaser.Scene
 
         this.server?.onGameStart(this.beginGame, this)
         this.server?.onBoardChanged(this.handleBoardChanged, this)
-        
+        this.server?.onNextTurn(this.handleNextTurn, this)
         this.server?.onPlayerWin(this.handlePlayerWin, this)
         this.server?.onGameStateChanged(this.handleGameStateChanged, this)
 
@@ -115,8 +118,7 @@ export default class Game extends Phaser.Scene
 
     private initializeUI()
     {
-        console.log('in initialize UI')
-        console.log(this)
+        console.log('initialize UI')
         
         const { width, height } = this.scale
         this.timerBar = new TimerBar(this, width * 0.5, 700) 
@@ -137,7 +139,7 @@ export default class Game extends Phaser.Scene
 
     private beginGame()
     {
-        //console.log(this.server?.playerIndex)
+        console.log('starting game')
 
         const width = this.scale.width * 0.5
         
@@ -145,6 +147,7 @@ export default class Game extends Phaser.Scene
         {
             this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
             this.gameStateText.setText('your turn')
+            this.timerBar.resetAndStartTimer()
         }
         else
         {
@@ -153,7 +156,9 @@ export default class Game extends Phaser.Scene
             this.timerBar.hideTimer()
         }   
 
-        this.server?.onNextTurn(this.handleNextTurn, this)
+        this.gameStarted = true
+
+        
     }
 
 
@@ -190,6 +195,10 @@ export default class Game extends Phaser.Scene
     {
         //console.log(`turn: ${playerIndex}`)
         //this.printBoardFromGame()
+
+    
+
+        console.log('turn changed')
 
         if(this.server?.playerIndex === playerIndex)
         {
