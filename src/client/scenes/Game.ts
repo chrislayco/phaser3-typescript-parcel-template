@@ -115,6 +115,9 @@ export default class Game extends Phaser.Scene
 
     private initializeUI()
     {
+        console.log('in initialize UI')
+        console.log(this)
+        
         const { width, height } = this.scale
         this.timerBar = new TimerBar(this, width * 0.5, 700) 
         this.add.existing(this.timerBar)
@@ -134,7 +137,7 @@ export default class Game extends Phaser.Scene
 
     private beginGame()
     {
-        console.log(this.server?.playerIndex)
+        //console.log(this.server?.playerIndex)
 
         const width = this.scale.width * 0.5
         
@@ -142,7 +145,6 @@ export default class Game extends Phaser.Scene
         {
             this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
             this.gameStateText.setText('your turn')
-            this.timerBar.resetAndStartTimer()
         }
         else
         {
@@ -186,10 +188,8 @@ export default class Game extends Phaser.Scene
 
     private handleNextTurn(playerIndex: Object)
     {
-        console.log(`turn: ${playerIndex}`)
+        //console.log(`turn: ${playerIndex}`)
         //this.printBoardFromGame()
-
-        
 
         if(this.server?.playerIndex === playerIndex)
         {
@@ -212,6 +212,10 @@ export default class Game extends Phaser.Scene
         }
 
         this.cells = []
+
+        this.time.clearPendingEvents()
+        this.timerBar.destroy()
+
         this.onGameOver({
             winner: this.server?.playerIndex == playerIndex
         })
@@ -225,7 +229,7 @@ export default class Game extends Phaser.Scene
             this.gameStateText.setText('waiting for players...')
         }
         if(state === GameState.Playing){
-            console.log('the game is now playing')
+            //console.log('the game is now playing')
         }
         else if(state === GameState.Finished){
             this.gameStateText.destroy()

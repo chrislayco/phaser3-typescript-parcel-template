@@ -77,6 +77,7 @@ export default class Server
 
     leave()
     {
+        console.log('leaving???')
         this.room?.leave()
         this.events.removeAllListeners()
     }
@@ -91,7 +92,7 @@ export default class Server
 
         if(this.playerIndex !== this.room.state.activePlayer)
         {
-            console.warn('not this player\'s turn FUCKER')
+            console.warn('not this player\'s turn')
 
             //console.log(`player index: this._playerIndex`)
             return

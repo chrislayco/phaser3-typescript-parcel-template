@@ -6,7 +6,7 @@ export default class TimerBar extends Phaser.GameObjects.Container
 {
     private bar: Phaser.GameObjects.Rectangle
     private text: Phaser.GameObjects.Text
-    private textValue = '10'
+    private textValue = ''
     private timerDuration = 10000
     private timerDurationInSeconds = 10
 
@@ -20,7 +20,6 @@ export default class TimerBar extends Phaser.GameObjects.Container
     {
         super(scene, x, y)
 
-        console.log('timer bar created')
         this.scene = scene
         
         this.bar = this.scene.add.rectangle(0, 0, Math.floor(this.scene.scale.width * 0.9), 15, 0xffffff)
@@ -41,6 +40,7 @@ export default class TimerBar extends Phaser.GameObjects.Container
         
     }
 
+
     private createTweens()
     {
         this.timerTween = this.scene.tweens.create({
@@ -60,11 +60,13 @@ export default class TimerBar extends Phaser.GameObjects.Container
 
     resetAndStartTimer()
     {
-        console.log('starting timer')
         this.bar.visible = true
         this.timerTween.play()
         
         this.textValue = this.timerDurationInSeconds.toString()
+
+        this.scene.time.removeAllEvents()
+
         this.timer = this.scene.time.addEvent({
             delay: 100,
             repeat: (this.timerDuration / 100) - 1,
@@ -79,8 +81,6 @@ export default class TimerBar extends Phaser.GameObjects.Container
         if(this.timerTween.isPlaying()){
             this.timerTween.seek(0)  
             this.timerTween.stop()
-            
-            
         }
 
         this.scene.time.removeEvent(this.timer)
