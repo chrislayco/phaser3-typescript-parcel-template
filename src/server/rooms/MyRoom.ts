@@ -29,6 +29,7 @@ export class MyRoom extends Room<MyRoomState> {
   }
 
   onJoin (client: Client, options: any) {
+  
     console.log(client.sessionId, "joined!");
  
     //instead of assigning index on join, assign when 2 players are present, randomly

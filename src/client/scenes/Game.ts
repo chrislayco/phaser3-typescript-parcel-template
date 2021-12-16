@@ -118,7 +118,6 @@ export default class Game extends Phaser.Scene
 
     private initializeUI()
     {
-        console.log('initialize UI')
         
         const { width, height } = this.scale
         this.timerBar = new TimerBar(this, width * 0.5, 700) 
@@ -139,7 +138,7 @@ export default class Game extends Phaser.Scene
 
     private beginGame()
     {
-        console.log('starting game')
+        //console.log('starting game')
 
         const width = this.scale.width * 0.5
         
@@ -196,9 +195,6 @@ export default class Game extends Phaser.Scene
         //console.log(`turn: ${playerIndex}`)
         //this.printBoardFromGame()
 
-    
-
-        console.log('turn changed')
 
         if(this.server?.playerIndex === playerIndex)
         {

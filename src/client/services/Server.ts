@@ -77,7 +77,6 @@ export default class Server
 
     leave()
     {
-        console.log('leaving???')
         this.room?.leave()
         this.events.removeAllListeners()
     }

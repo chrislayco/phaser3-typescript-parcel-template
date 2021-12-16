@@ -21,16 +21,25 @@ const wins = [
     [{row: 0, col: 2}, {row: 1, col: 1}, {row: 2, col: 0}]
 ]
 
-
+enum Outcomes
+{
+    Win,
+    Tie,
+    None
+}
 
 export default class CheckWinnerCommand extends Command<IMyRoomState, Payload>
 {
+
+    
+
     getValueAt = (row: number, col: number) => {
         let idx = 3 * row + col
         return this.room.state.board[idx]
     }
 
-    private calculateWinner(){
+    private calculateWinner()
+    {
 
         for(let i = 0; i < wins.length; i++)
         {
@@ -41,24 +50,48 @@ export default class CheckWinnerCommand extends Command<IMyRoomState, Payload>
 
 
             if(val1 !== Cell.Empty && val1 == val2 && val1 == val3){
-                return true
+                return Outcomes.Win
             }
         }
-        return false
+        
+        if(this.calculateTie())
+        {
+            return Outcomes.Tie
+        }
+
+        return Outcomes.None 
+    }
+
+    private calculateTie()
+    {
+        for(let i = 0; i < 9; i++)
+        {
+            if(this.room.state.board[i] === Cell.Empty)
+            {
+                return false
+            }
+        }
+        return true
     }
     
     execute()
     {
-        const win = this.calculateWinner()
 
-        if(win)
+
+        switch(this.calculateWinner())
         {
-            this.room.state.winnerPlayer = this.room.state.activePlayer
-            console.log(`winner: ${this.room.state.winnerPlayer}`)
+            case(Outcomes.Win):
+                this.room.state.winnerPlayer = this.room.state.activePlayer
+                console.log(`winner: ${this.room.state.winnerPlayer}`)
+                break
+
+            case(Outcomes.Tie):
+                console.log('tied')
+
+            case(Outcomes.None):
+                return new NextTurnCommand()
+
         }
-        else
-        {
-            return new NextTurnCommand()
-        }
+
     }
 }
