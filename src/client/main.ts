@@ -13,7 +13,7 @@ const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
 	width: 800,
 	height: 800,
-	parent: 'phaser',
+	parent: "phaser",
 	dom: {
 		createContainer: true
 	},
