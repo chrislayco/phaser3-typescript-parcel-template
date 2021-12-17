@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser, { Loader } from 'phaser'
 
 export default class LandingPage extends Phaser.Scene
 {
@@ -14,7 +14,7 @@ export default class LandingPage extends Phaser.Scene
     preload()
     {
         console.log('preloading?')
-        this.load.html('nameform', '/components/nameform.html')
+        this.load.html('nameform', '/client/scenes/components/nameform.html')
     }
 
     create()
