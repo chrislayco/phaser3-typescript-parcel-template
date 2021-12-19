@@ -13,13 +13,13 @@ export default class LandingPage extends Phaser.Scene
     }
 
 
-    preload()
+    async preload()
     {
         console.log('preloading?')
         //this.load.setPath()
         //this.load.html('nameform', './components/nameform')
-        this.load.setPath("/client/components")
-        this.load.image('kirby', "kirby.png")
+        //this.load.setPath("/client/components")
+        this.load.image('kirby', "images/kirby.png")
 
         // https://www.html5gamedevs.com/topic/6606-image-not-displaying-in-phaser/
         
