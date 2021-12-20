@@ -3,7 +3,6 @@ import Phaser, { Loader } from 'phaser'
 export default class LandingPage extends Phaser.Scene
 {
     element = Phaser.GameObjects.DOMElement
-    loader: Phaser.Loader.LoaderPlugin
 
     constructor()
     {
@@ -20,31 +19,24 @@ export default class LandingPage extends Phaser.Scene
 
 
 
-    async create()
+    create()
     {
         console.log('landing page')
-        
-        // const kreb = this.add.image(500, 200, 'kirby')
 
+        console.log("why?")
         const {width, height} = this.scale
 
-        const element = this.add.dom(width * 0.5, height * 0.5).createFromCache('nameform')
+        const element = this.add.dom(width * 0.5, height * 0.5)
+            .createFromCache('nameform')
+            
+        
+        
+        //console.log(button)
 
-        this.add.dom(400, 400, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
-        this.add.dom(100, 300, 'div', 'background-color: red; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
 
-
-
-        //c
-        //element.setPerspective(800)
-
-        //this.load.start()
-
-        console.log(this.load.isReady())
-
-        //this.add.text(400, 400, 'test')
-
-        //element.setPerspective(800)
+        // button?.addEventListener('click', (event) => {
+        //     console.log('clicked!')
+        // })
         
     }
 }
