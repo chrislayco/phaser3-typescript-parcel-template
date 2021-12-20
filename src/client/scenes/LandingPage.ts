@@ -35,14 +35,22 @@ export default class LandingPage extends Phaser.Scene
             //     }
             // )
             
-        const button = element.getChildByID('logButton')
+        element.on('click', (event) => {
+            console.log(event)
+            console.log(event.target.name)
+        })
 
-        button?.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
-            () => {
-                console.log('clicked button')
+        const button = element.getChildByName('loginButton')
+        const input = element.getChildByName('username')
+
+        button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
+            (event) => {
+                console.log(event)
+
+                
+                console.log(input.value)
             })
 
-        
         console.log(button)
 
 
