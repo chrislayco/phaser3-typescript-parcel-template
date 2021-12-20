@@ -1,6 +1,5 @@
 import Phaser, { Loader } from 'phaser'
 
-
 export default class LandingPage extends Phaser.Scene
 {
     element = Phaser.GameObjects.DOMElement
@@ -14,16 +13,14 @@ export default class LandingPage extends Phaser.Scene
     }
 
 
-    preload()
+    async preload()
     {
         console.log('preloading?')
         //this.load.setPath()
-        //this.load.image('kirby')
-
+        //this.load.html('nameform', './components/nameform')
         //this.load.setPath("/client/components")
-        
-        // this.load.setBaseURL('http://labs.phaser.io')
-        // this.load.image('sky', 'assets/skies/space3.png')
+        this.load.image('kirby', "images/kirby.png")
+
         // https://www.html5gamedevs.com/topic/6606-image-not-displaying-in-phaser/
         
     }
@@ -44,7 +41,7 @@ export default class LandingPage extends Phaser.Scene
 
         //this.load.start()
 
-        //console.log(this.load.isReady())
+        console.log(this.load.isReady())
 
         //this.add.text(400, 400, 'test')
 

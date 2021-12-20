@@ -17,11 +17,6 @@ export default class Bootstrap extends Phaser.Scene
         this.server = new Server()
     }
 
-    preload()
-    {
-        this.load.image('kirby', "images/kirby.png")
-    }
-
     create()
     {
         //this.createNewGame()
