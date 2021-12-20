@@ -28,9 +28,15 @@ export default class LandingPage extends Phaser.Scene
 
         const element = this.add.dom(width * 0.5, height * 0.5)
             .createFromCache('nameform')
+            .setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
+                () => {
+                    console.log('clicked')
+                }
+            )
             
         
-        
+        console.log(element)
         //console.log(button)
 
 
