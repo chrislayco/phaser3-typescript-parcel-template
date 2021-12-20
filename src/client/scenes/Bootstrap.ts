@@ -17,6 +17,11 @@ export default class Bootstrap extends Phaser.Scene
         this.server = new Server()
     }
 
+    preload()
+    {
+        
+    }
+
     create()
     {
         //this.createNewGame()
