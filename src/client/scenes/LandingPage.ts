@@ -28,16 +28,22 @@ export default class LandingPage extends Phaser.Scene
 
         const element = this.add.dom(width * 0.5, height * 0.5)
             .createFromCache('nameform')
-            .setInteractive()
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
-                () => {
-                    console.log('clicked')
-                }
-            )
+            // .setInteractive()
+            // .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
+            //     (event) => {
+            //         console.log(typeof event)
+            //     }
+            // )
             
+        const button = element.getChildByID('logButton')
+
+        button?.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
+            () => {
+                console.log('clicked button')
+            })
+
         
-        console.log(element)
-        //console.log(button)
+        console.log(button)
 
 
         // button?.addEventListener('click', (event) => {
