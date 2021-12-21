@@ -18,7 +18,3 @@ export interface ILandingPageSceneData
     onSubmit: (data: { username: string}) => void    
 }
 
-export interface IPlayerData
-{
-    username: string
-}

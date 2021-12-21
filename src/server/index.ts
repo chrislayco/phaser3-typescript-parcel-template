@@ -3,8 +3,10 @@ import express from 'express'
 import cors from 'cors'
 import { Server } from 'colyseus'
 import { monitor } from '@colyseus/monitor'
+import { LobbyRoom } from "colyseus"
 
 import { MyRoom } from './rooms/MyRoom'
+
 
 const port = Number(process.env.PORT || 2567)
 const app = express()
@@ -17,7 +19,19 @@ const gameServer = new Server({
     server,
 })
 
-gameServer.define('my_room', MyRoom)
+
+// Expose the "lobby" room.
+gameServer
+  .define("lobby", LobbyRoom);
+
+// Expose your game room with realtime listing enabled.
+gameServer
+  .define("my_room", MyRoom)
+  .enableRealtimeListing();
+
+
+
+//gameServer.define('my_room', MyRoom)
 
 app.use('/colyseus', monitor())
 

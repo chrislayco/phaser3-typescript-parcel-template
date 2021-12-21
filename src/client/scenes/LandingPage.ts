@@ -1,5 +1,5 @@
 import Phaser, { Loader } from 'phaser'
-import { ILandingPageSceneData, IPlayerData } from '../../types/scenes'
+import { ILandingPageSceneData } from '../../types/scenes'
 
 export default class LandingPage extends Phaser.Scene
 {
@@ -48,13 +48,10 @@ export default class LandingPage extends Phaser.Scene
                     if(this.validateString(input.value))
                     {
                         // start lobby from bootstrap
-
                         this.onSubmit({ username: input.value })
                     }
                 }
-
-                
-                
+  
             })
 
         
@@ -63,11 +60,12 @@ export default class LandingPage extends Phaser.Scene
     private validateString(s: string)
     {
         
-        let validRegEx = '/^[^\\\/&]*$/' 
+        let validRegEx = /^[a-zA-Z0-9]+$/
 
-        if(s.match(validRegEx)){
-            return false
+        if(s.match(validRegEx) && s.length <= 16){
+            return true
         }
-        return true
+        console.warn('invalid username')
+        return false
     }
 }

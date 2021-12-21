@@ -1,5 +1,5 @@
 import Phaser from "phaser"
-import { IGameOverSceneData, IPlayerData } from "~/types/scenes"
+import { IGameOverSceneData } from "types/scenes"
 import Server from '../services/Server'
 import Game from './Game'
 

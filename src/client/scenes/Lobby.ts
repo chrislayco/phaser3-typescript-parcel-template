@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import { IPlayerData } from '~/types/scenes'
 
 export default class Lobby extends Phaser.Scene
 {
@@ -8,12 +7,16 @@ export default class Lobby extends Phaser.Scene
         super('lobby')
     }
 
-    create(data: IPlayerData)
+    create(data: { username : string})
     {
         const { width, height } = this.scale
         let text = 'welcome ' + data.username
 
+        this.add.text(width * 0.5, height * 0.1, text).setOrigin(0.5)
 
-        this.add.text(width * 0.5, height * 0.5, text).setOrigin(0.5)
+        //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
+        //client side
+
+        
     }
 }
