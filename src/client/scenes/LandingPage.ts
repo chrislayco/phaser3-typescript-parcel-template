@@ -1,8 +1,12 @@
 import Phaser, { Loader } from 'phaser'
+import { ILandingPageSceneData, IPlayerData } from '../../types/scenes'
 
 export default class LandingPage extends Phaser.Scene
 {
     element = Phaser.GameObjects.DOMElement
+    private onSubmit?: (data: { username: string }) => void
+
+    
 
     constructor()
     {
@@ -19,44 +23,51 @@ export default class LandingPage extends Phaser.Scene
 
 
 
-    create()
+    create(data: ILandingPageSceneData)
     {
         console.log('landing page')
 
-        console.log("why?")
+        this.onSubmit = data.onSubmit
+        
         const {width, height} = this.scale
 
         const element = this.add.dom(width * 0.5, height * 0.5)
             .createFromCache('nameform')
-            // .setInteractive()
-            // .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
-            //     (event) => {
-            //         console.log(typeof event)
-            //     }
-            // )
+
             
-        element.on('click', (event) => {
-            console.log(event)
-            console.log(event.target.name)
-        })
 
         const button = element.getChildByName('loginButton')
-        const input = element.getChildByName('username')
+        const input = element.getChildByName('username') as HTMLInputElement
 
         button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
-                console.log(event)
+                console.log('clicked')
+                if(input.value !== '' && this.onSubmit)
+                {
+        
+                    if(this.validateString(input.value))
+                    {
+                        // start lobby from bootstrap
+
+                        this.onSubmit({ username: input.value })
+                    }
+                }
 
                 
-                console.log(input.value)
+                
             })
 
-        console.log(button)
-
-
-        // button?.addEventListener('click', (event) => {
-        //     console.log('clicked!')
-        // })
         
+    }
+
+    private validateString(s: string)
+    {
+        
+        let validRegEx = '/^[^\\\/&]*$/' 
+
+        if(s.match(validRegEx)){
+            return false
+        }
+        return true
     }
 }

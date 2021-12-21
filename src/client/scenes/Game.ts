@@ -9,10 +9,9 @@ import TimerBar from "./components/TimerBar"
 export default class Game extends Phaser.Scene
 {
     private server?: Server
-    private onGameOver?: (data: IGameOverSceneData) => void
+    private onGameOver?: (data: {winner: number}) => void
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[]
     private timerBar: TimerBar
-    private gameStarted: boolean
 
     private size: number
     private gameStateText: Phaser.GameObjects.Text
@@ -25,6 +24,9 @@ export default class Game extends Phaser.Scene
 
         this.cells = []
 
+        
+
+
 
     }
 
@@ -36,7 +38,6 @@ export default class Game extends Phaser.Scene
         this.server = server
         this.onGameOver = onGameOver
 
-        this.gameStarted = false
 
         const width = this.scale.width
         this.gameStateText = this.add.text(width * 0.5, 50, 'waiting for opponent...')
@@ -156,7 +157,6 @@ export default class Game extends Phaser.Scene
             this.timerBar.hideTimer()
         }   
 
-        this.gameStarted = true
 
         
     }

@@ -1,12 +1,11 @@
 import Phaser from "phaser"
-import { IGameOverSceneData } from "~/types/scenes"
+import { IGameOverSceneData, IPlayerData } from "~/types/scenes"
 import Server from '../services/Server'
 import Game from './Game'
 
 export default class Bootstrap extends Phaser.Scene
 {
     private server!: Server
-    private gameScene: Phaser.Scene
     constructor()
     {
         super('bootstrap')
@@ -25,7 +24,26 @@ export default class Bootstrap extends Phaser.Scene
     create()
     {
         //this.createNewGame()
-        this.scene.launch('landing-page')
+        this.createLandingPage()
+
+    }
+
+    private createLandingPage()
+    {
+        this.scene.launch(
+            'landing-page',
+            {
+                onSubmit: this.handleSubmit
+            }
+        )
+    }
+
+    private handleSubmit = (data: {IPlayerData}) =>
+    {
+        this.scene.stop('landing-page')
+        this.scene.launch('lobby', {
+            ...data
+        })
     }
 
     private createNewGame()

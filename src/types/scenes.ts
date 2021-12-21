@@ -10,5 +10,15 @@ export interface IGameOverSceneData
 export interface IGameSceneData
 {
     server: Server
-    onGameOver: (data: {winner: boolean}) => void
+    onGameOver: (data: {winner: number}) => void
+}
+
+export interface ILandingPageSceneData
+{
+    onSubmit: (data: { username: string}) => void    
+}
+
+export interface IPlayerData
+{
+    username: string
 }

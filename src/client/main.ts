@@ -5,7 +5,7 @@ import Bootstrap from './scenes/Bootstrap'
 import Game from './scenes/Game'
 import GameOver from './scenes/GameOver'
 import LandingPage from './scenes/LandingPage'
-
+import Lobby from './scenes/Lobby'
 
 //    //https://blog.ourcade.co/posts/2020/dom-element-button-phaser-3-typescript-rxjs-jsx/
 
@@ -23,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [LandingPage, Bootstrap, Game, GameOver]
+	scene: [Bootstrap, LandingPage, Lobby, Game, GameOver]
 }
 
 
