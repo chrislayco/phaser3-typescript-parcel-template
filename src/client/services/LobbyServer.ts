@@ -4,7 +4,8 @@ import Bootstrap from "../scenes/Bootstrap";
 const client = new Client("ws://localhost:2567");
 const lobby = await client.joinOrCreate("lobby");
 
-export default class LobbyServer{
+export default class LobbyServer
+{
     allRooms: RoomAvailable[] = [];
 
 
@@ -13,22 +14,27 @@ export default class LobbyServer{
     // display rooms in lobby room
     // 
 
-    lobby.onMessage("rooms", (rooms) => {
-    allRooms = rooms;
-    });
-
-    lobby.onMessage("+", ([roomId, room]) => {
-    const roomIndex = allRooms.findIndex((room) => room.roomId === roomId);
-    if (roomIndex !== -1) {
-        allRooms[roomIndex] = room;
-
-    } else {
-        allRooms.push(room);
+    constructor()
+    {
+        lobby.onMessage("rooms", (rooms) => {
+            this.allRooms = rooms;
+            });
+        
+            lobby.onMessage("+", ([roomId, room]) => {
+            const roomIndex = this.allRooms.findIndex((room) => room.roomId === roomId);
+            if (roomIndex !== -1) {
+                this.allRooms[roomIndex] = room;
+        
+            } else {
+                this.allRooms.push(room);
+            }
+            });
+        
+            lobby.onMessage("-", (roomId) => {
+            this.allRooms = this.allRooms.filter((room) => room.roomId !== roomId);
+            });
     }
-    });
 
-    lobby.onMessage("-", (roomId) => {
-    allRooms = allRooms.filter((room) => room.roomId !== roomId);
-    });
+    
 
 }
