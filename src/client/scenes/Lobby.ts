@@ -1,14 +1,21 @@
 import Phaser from 'phaser'
+import { Client } from 'colyseus.js'
+import LobbyServer from '../services/LobbyServer'
 
 export default class Lobby extends Phaser.Scene
 {
+    lobbyServer!: LobbyServer
     constructor()
     {
         super('lobby')
     }
 
-    create(data: { username : string})
+    async create(data: { username : string , client: Client } )
     {
+        this.lobbyServer = new LobbyServer(data.client)
+
+        await this.lobbyServer.join()
+
         const { width, height } = this.scale
         let text = 'welcome ' + data.username
 
@@ -17,6 +24,6 @@ export default class Lobby extends Phaser.Scene
         //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
         //client side
 
-        
+
     }
 }

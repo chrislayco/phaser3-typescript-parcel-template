@@ -1,11 +1,14 @@
 import Phaser from "phaser"
 import { IGameOverSceneData } from "types/scenes"
 import Server from '../services/Server'
+import { Client, Room } from "colyseus.js"
 import Game from './Game'
 
 export default class Bootstrap extends Phaser.Scene
 {
     private server!: Server
+    private client!: Client
+
     constructor()
     {
         super('bootstrap')
@@ -14,6 +17,7 @@ export default class Bootstrap extends Phaser.Scene
     init()
     {
         this.server = new Server()
+        this.client = new Client('ws://localhost:2567')
     }
 
     preload()
@@ -24,7 +28,12 @@ export default class Bootstrap extends Phaser.Scene
     create()
     {
         //this.createNewGame()
-        this.createLandingPage()
+        //this.createLandingPage()
+        this.createLobby(
+            { 
+                username: 'test'
+            }
+        )
 
     }
 
@@ -38,7 +47,20 @@ export default class Bootstrap extends Phaser.Scene
         )
     }
 
-    private handleSubmit = (data: {IPlayerData}) =>
+    private createLobby(data: { username: string })
+    {
+        console.log('buheunar')
+        
+        this.scene.launch(
+            'lobby',
+            {
+                ...data,
+                client: this.client
+            }
+        )
+    }
+
+    private handleSubmit = (data: { username: string}) =>
     {
         this.scene.stop('landing-page')
         this.scene.launch('lobby', {

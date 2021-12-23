@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import { IGameOverSceneData, IGameSceneData } from "~/types/scenes"
+import { Client } from 'colyseus.js'
 import IMyState, { Cell, GameState } from "../../types/IMyState"
 import type Server from '../services/Server'
 import TimerBar from "./components/TimerBar"
@@ -11,10 +12,10 @@ export default class Game extends Phaser.Scene
     private server?: Server
     private onGameOver?: (data: {winner: number}) => void
     private cells: { display: Phaser.GameObjects.Rectangle, value: Cell }[]
-    private timerBar: TimerBar
+    private timerBar?: TimerBar
 
     private size: number
-    private gameStateText: Phaser.GameObjects.Text
+    private gameStateText?: Phaser.GameObjects.Text
 
     constructor()
     {
@@ -30,7 +31,7 @@ export default class Game extends Phaser.Scene
 
     }
 
-    async create(data: IGameSceneData)
+    async create(data: {IGameSceneData})
     {
 
         const { server, onGameOver } = data

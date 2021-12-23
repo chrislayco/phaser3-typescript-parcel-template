@@ -24,15 +24,12 @@ export default class Server
         if(!this.room)
         {
             return GameState.Waiting
-            
         }
-
         return this.room?.state.gameState
     }
 
     constructor()
     {
-        this.client = new Client('ws://localhost:2567')
         this.events = new Phaser.Events.EventEmitter()
     }
 
