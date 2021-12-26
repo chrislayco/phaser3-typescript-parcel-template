@@ -9,11 +9,6 @@ export default class LobbyServer
 
     client: Client
 
-    // todo:
-    // pass client in Bootstrap
-    // display rooms in lobby room
-    // 
-
     constructor(client: Client)
     {
         this.client = client

@@ -67,6 +67,12 @@ export default class Lobby extends Phaser.Scene
 
     }
 
+    // todo: 
+    // make an html for a row of a lobby
+    // create a list that updates when a new room is made
+    // add buttons that join the game
+    // update list when stuff changes (players, settings, state)
+    
     private updateLobbyList(s: string)
     {
         this.text?.setText(s)
