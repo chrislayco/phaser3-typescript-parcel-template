@@ -28,15 +28,17 @@ export default class Server
         return this.room?.state.gameState
     }
 
-    constructor()
+    constructor(client: Client)
     {
         this.events = new Phaser.Events.EventEmitter()
+        this.client = client
     }
 
  
     async join()
     {
         this.room = await this.client.joinOrCreate<IMyState>('my_room')
+        
         
         this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
             this._playerIndex = message.playerIndex

@@ -1,23 +1,29 @@
-import { LobbyRoom } from "colyseus"
+// import { LobbyRoom, Client } from "colyseus"
 
-import { Room, updateLobby } from "colyseus";
+// import { Room, updateLobby } from "colyseus";
 
-class YourGameRoom extends Room {
+// export class MyLobbyRoom extends LobbyRoom {
 
-  onCreate() {
+//   onCreate(options: any) {
 
-    //
-    // This is just a demonstration
-    // on how to call `updateLobby` from your Room
-    //
-    this.clock.setTimeout(() => {
+//     //
+//     // This is just a demonstration
+//     // on how to call `updateLobby` from your Room
+//     //
+//     // this.clock.setTimeout(() => {
 
-      this.setMetadata({
-        customData: "Hello world!"
-      }).then(() => updateLobby(this));
+//     //   this.setMetadata({
+//     //     customData: "Hello world!"
+//     //   }).then(() => updateLobby(this));
 
-    }, 5000);
+//     // }, 5000);
+//     console.log('made lobby room')
 
-  }
+//   }
 
-}
+//   onJoin(client: Client, options: any)
+//   {
+//     //console.log(client.sessionId, 'joined!!!')
+//   }
+
+// }

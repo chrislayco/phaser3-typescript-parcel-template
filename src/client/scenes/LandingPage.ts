@@ -25,8 +25,6 @@ export default class LandingPage extends Phaser.Scene
 
     create(data: ILandingPageSceneData)
     {
-        console.log('landing page')
-
         this.onSubmit = data.onSubmit
         
         const {width, height} = this.scale
@@ -41,7 +39,6 @@ export default class LandingPage extends Phaser.Scene
 
         button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
-                console.log('clicked')
                 if(input.value !== '' && this.onSubmit)
                 {
         

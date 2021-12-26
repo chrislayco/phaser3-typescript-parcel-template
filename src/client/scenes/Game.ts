@@ -24,21 +24,15 @@ export default class Game extends Phaser.Scene
         this.size = 128
 
         this.cells = []
-
-        
-
-
-
     }
 
-    async create(data: {IGameSceneData})
+    async create(data: IGameSceneData)
     {
 
         const { server, onGameOver } = data
 
         this.server = server
         this.onGameOver = onGameOver
-
 
         const width = this.scale.width
         this.gameStateText = this.add.text(width * 0.5, 50, 'waiting for opponent...')
@@ -106,7 +100,7 @@ export default class Game extends Phaser.Scene
         if(this.server?.gameState === GameState.Waiting)
         {
             const width = this.scale.width
-            this.gameStateText.setText('waiting for players...')
+            this.gameStateText?.setText('waiting for players...')
         }
 
         this.server?.onGameStart(this.beginGame, this)
@@ -148,14 +142,14 @@ export default class Game extends Phaser.Scene
         if(this.server?.playerIndex === 0)
         {
             this.add.text(width, 70, 'you are: X', ).setOrigin(0.5)
-            this.gameStateText.setText('your turn')
-            this.timerBar.resetAndStartTimer()
+            this.gameStateText?.setText('your turn')
+            this.timerBar?.resetAndStartTimer()
         }
         else
         {
             this.add.text(width, 70, 'you are: O', ).setOrigin(0.5)
-            this.gameStateText.setText('opponent\'s turn')
-            this.timerBar.hideTimer()
+            this.gameStateText?.setText('opponent\'s turn')
+            this.timerBar?.hideTimer()
         }   
 
 
@@ -202,13 +196,13 @@ export default class Game extends Phaser.Scene
 
         if(this.server?.playerIndex === playerIndex)
         {
-            this.gameStateText.setText('your turn')
-            this.timerBar.resetAndStartTimer()
+            this.gameStateText?.setText('your turn')
+            this.timerBar?.resetAndStartTimer()
         }
         else
         {
-            this.gameStateText.setText('opponent\'s turn')
-            this.timerBar.hideTimer()
+            this.gameStateText?.setText('opponent\'s turn')
+            this.timerBar?.hideTimer()
         }
         
     }
@@ -223,7 +217,7 @@ export default class Game extends Phaser.Scene
         this.cells = []
 
         this.time.clearPendingEvents()
-        this.timerBar.destroy()
+        this.timerBar?.destroy()
 
         if(winningPlayer === this.server?.playerIndex)
         {
@@ -259,8 +253,8 @@ export default class Game extends Phaser.Scene
             //console.log('the game is now playing')
         }
         else if(state === GameState.Finished){
-            this.gameStateText.destroy()
-            this.gameStateText = null
+            this.gameStateText?.destroy()
+            // this.gameStateText = null
         }
     }
 

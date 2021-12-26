@@ -23,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 200 }
 		}
 	},
-	scene: [Bootstrap, LandingPage, Lobby]
+	scene: [Bootstrap, LandingPage, Lobby, Game, GameOver]
 }
 
 

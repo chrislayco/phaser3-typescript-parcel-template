@@ -1,9 +1,9 @@
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
-import { Server } from 'colyseus'
+import { Server, LobbyRoom } from 'colyseus'
 import { monitor } from '@colyseus/monitor'
-import { LobbyRoom } from "colyseus"
+
 
 import { MyRoom } from './rooms/MyRoom'
 

@@ -2,11 +2,12 @@ import Phaser from "phaser"
 import { IGameOverSceneData } from "types/scenes"
 import Server from '../services/Server'
 import { Client, Room } from "colyseus.js"
-import Game from './Game'
+import LobbyServer from "../services/LobbyServer"
 
 export default class Bootstrap extends Phaser.Scene
 {
     private server!: Server
+    private lobbyServer!: LobbyServer
     private client!: Client
 
     constructor()
@@ -16,8 +17,10 @@ export default class Bootstrap extends Phaser.Scene
 
     init()
     {
-        this.server = new Server()
+        
         this.client = new Client('ws://localhost:2567')
+        this.server = new Server(this.client)
+        this.lobbyServer = new LobbyServer(this.client)
     }
 
     preload()
@@ -28,12 +31,8 @@ export default class Bootstrap extends Phaser.Scene
     create()
     {
         //this.createNewGame()
-        //this.createLandingPage()
-        this.createLobby(
-            { 
-                username: 'test'
-            }
-        )
+        this.createLandingPage()
+        
 
     }
 
@@ -49,13 +48,13 @@ export default class Bootstrap extends Phaser.Scene
 
     private createLobby(data: { username: string })
     {
-        console.log('buheunar')
-        
+        this.scene.stop('landing-page')
         this.scene.launch(
             'lobby',
             {
                 ...data,
-                client: this.client
+                lobbyServer: this.lobbyServer,
+                createNewGame: this.createNewGame
             }
         )
     }
@@ -63,13 +62,14 @@ export default class Bootstrap extends Phaser.Scene
     private handleSubmit = (data: { username: string}) =>
     {
         this.scene.stop('landing-page')
-        this.scene.launch('lobby', {
-            ...data
-        })
+        
+        this.createLobby(data)
     }
 
-    private createNewGame()
-    {
+    private createNewGame = () =>
+    {   
+        this.scene.stop('lobby')
+
         if(this.scene.isActive('game'))
         {
             console.log('there is another scene active!')
@@ -80,7 +80,12 @@ export default class Bootstrap extends Phaser.Scene
             server: this.server,
             onGameOver: this.handleGameOver
         })
+
+        // for testing
+        //this.scene.setVisible(false, 'game')
     }
+
+
 
     private handleRestart = () => {
         this.scene.stop('game-over')

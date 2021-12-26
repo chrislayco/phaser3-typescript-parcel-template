@@ -1,4 +1,4 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, updateLobby } from "colyseus";
 import { Dispatcher } from '@colyseus/command'
 import { Message } from "../../types/messages"
 import MyRoomState from "./schema/MyRoomState";
@@ -13,6 +13,8 @@ export class MyRoom extends Room<MyRoomState> {
   private firstPlayer = -1
 
   onCreate (options: any) {
+
+    console.log('game room created - the lobby should update after this')
     this.maxClients = 2
     this.setState(new MyRoomState());
 
@@ -46,6 +48,14 @@ export class MyRoom extends Room<MyRoomState> {
 
       this.state.activePlayer = 0
     }
+
+    this.clock.setTimeout(() => {
+
+      this.setMetadata({
+        customData: "Hello world!"
+      }).then(() => updateLobby(this));
+
+    }, 5000);
   }
 
   onLeave (client: Client, consented: boolean) {
