@@ -9,6 +9,10 @@ export default class Lobby extends Phaser.Scene
     createNewGame?: () => (void)
     text?: Phaser.GameObjects.Text
 
+    domElement?: Phaser.GameObjects.DOMElement
+
+
+
     constructor()
     {
         super('lobby')
@@ -35,6 +39,8 @@ export default class Lobby extends Phaser.Scene
         //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
         //client side
 
+        this.lobbyServer?.onLobbyUpdate(this.updateLobbyList, this)
+
         this.createUI()
     }
 
@@ -44,13 +50,13 @@ export default class Lobby extends Phaser.Scene
 
         this.text = this.add.text(width * 0.5, height * 0.7, '')
 
-        const element = this.add.dom(width * 0.5, height * 0.5)
+        this.domElement = this.add.dom(width * 0.5, height * 0.5)
             .createFromCache('lobby')
 
         
 
-        const button = element.getChildByName('createGameButton')
-        const printButton = element.getChildByName('printGamesButton')
+        const button = this.domElement.getChildByName('createGameButton')
+        const printButton = this.domElement.getChildByName('printGamesButton')
 
         button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
@@ -62,19 +68,58 @@ export default class Lobby extends Phaser.Scene
 
         printButton.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
-                this.lobbyServer.printRooms()
+                this.updateLobbyList()
             })
 
     }
 
     // todo: 
     // make an html for a row of a lobby
-    // create a list that updates when a new room is made
     // add buttons that join the game
-    // update list when stuff changes (players, settings, state)
     
-    private updateLobbyList(s: string)
+    private updateLobbyList()
     {
-        this.text?.setText(s)
+        let lobbyList = this.domElement?.getChildByID('lobbyList') 
+        let roomList = this.lobbyServer.roomList
+        
+        if(!lobbyList)
+        {
+            return
+        }
+        else if(roomList.length)
+        {
+            lobbyList.innerHTML = "<li>no rooms found</li>"
+            return
+        }
+
+        
+
+        let s = ''
+
+        // use a template variable so that we can make a seprate html for row component
+        // and pass in metadata to fill row
+        for(let i = 0; i < roomList.length; i++){
+            s += "<li> "
+            s += roomList[i].roomId.toString()
+            s += "   " + roomList[i].clients
+            s += " / " + roomList[i].maxClients
+            s += "</li>\n"
+        }
+
+
+        if(lobbyList)
+        {
+            lobbyList.innerHTML = s
+        }
+        else
+        {
+            console.warn('no lobby list element')
+        }
+
+        
+        
+        
+
+        
     }
 }
