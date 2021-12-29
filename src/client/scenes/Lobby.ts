@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { Client } from 'colyseus.js'
+import { Client, RoomAvailable } from 'colyseus.js'
 import LobbyServer from '../services/LobbyServer'
 import { updateLobby } from 'colyseus'
 
@@ -99,12 +99,10 @@ export default class Lobby extends Phaser.Scene
         // use a template variable so that we can make a seprate html for row component
         // and pass in metadata to fill row
         for(let i = 0; i < roomList.length; i++){
-            s += "<li> "
-            s += roomList[i].roomId.toString()
-            s += "   " + roomList[i].clients
-            s += " / " + roomList[i].maxClients
-            s += "</li>\n"
+            s += this.createListRow(roomList[i])
         }
+
+        
 
 
         if(lobbyList)
@@ -115,11 +113,22 @@ export default class Lobby extends Phaser.Scene
         {
             console.warn('no lobby list element')
         }
+  
+    }
 
-        
-        
+    private createListRow(room: RoomAvailable<any>)
+    {
+        if()
         
 
-        
+        let s = ''
+        s += "<li> "
+        s += room.roomId.toString()
+        s += "   " + room.clients
+        s += " / " + room.maxClients
+        s += "<button id=\"" + room.roomId.toString() + "\" "
+        s += "</li>\n"
+
+        return s
     }
 }
