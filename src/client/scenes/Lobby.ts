@@ -21,6 +21,7 @@ export default class Lobby extends Phaser.Scene
     preload()
     {
         this.load.html('lobby', 'static/lobby.html')
+        this.load.html('lobbyRow', 'static/lobbyrow.html')
     }
 
     async create(data: { username : string , lobbyServer: LobbyServer, createNewGame: () => (void) } )
@@ -73,9 +74,6 @@ export default class Lobby extends Phaser.Scene
 
     }
 
-    // todo: 
-    // make an html for a row of a lobby
-    // add buttons that join the game
     
     private updateLobbyList()
     {
@@ -86,13 +84,12 @@ export default class Lobby extends Phaser.Scene
         {
             return
         }
-        else if(roomList.length)
+        else if(roomList.length === 0)
         {
             lobbyList.innerHTML = "<li>no rooms found</li>"
             return
         }
 
-        
 
         let s = ''
 
@@ -101,33 +98,42 @@ export default class Lobby extends Phaser.Scene
         for(let i = 0; i < roomList.length; i++){
             s += this.createListRow(roomList[i])
         }
-
-        
-
-
-        if(lobbyList)
-        {
-            lobbyList.innerHTML = s
-        }
-        else
-        {
-            console.warn('no lobby list element')
-        }
   
     }
 
     private createListRow(room: RoomAvailable<any>)
     {
-        if()
-        
+    
+        const row = this.add.dom(400, 500).createFromCache('lobbyRow')
 
-        let s = ''
-        s += "<li> "
-        s += room.roomId.toString()
-        s += "   " + room.clients
-        s += " / " + room.maxClients
-        s += "<button id=\"" + room.roomId.toString() + "\" "
-        s += "</li>\n"
+        row.getChildByID('roomID').textContent = room.roomId.toString()
+
+        let s = room.clients.toString() + " / " + room.maxClients.toString()
+
+        row.getChildByID('playerCount').textContent = s
+
+        const button = row.getChildByID('joinButton')
+
+        button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
+            (event) => {
+                console.log('join ' + room.roomId.toString())
+
+                // todo:
+                // modify lobbyserver and servers to join this lobby on press
+                // launch and destroy corresponding scenes
+
+            })
+
+        //let item = this.domElement.createElement("li")
+        //let ul = document.createElement('ul')
+
+        // let s = ''
+        // s += "<li> "
+        // s += room.roomId.toString()
+        // s += "   " + room.clients
+        // s += " / " + room.maxClients
+        // s += "<button id=\"" + room.roomId.toString() + "\" "
+        // s += "</li>\n"
 
         return s
     }
