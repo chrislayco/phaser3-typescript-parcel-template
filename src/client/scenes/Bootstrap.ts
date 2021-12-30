@@ -54,7 +54,8 @@ export default class Bootstrap extends Phaser.Scene
             {
                 ...data,
                 lobbyServer: this.lobbyServer,
-                createNewGame: this.createNewGame
+                createNewGame: this.createNewGame,
+                joinGame: this.joinGame
             }
         )
     }
@@ -68,7 +69,10 @@ export default class Bootstrap extends Phaser.Scene
 
     private createNewGame = () =>
     {   
-        this.scene.stop('lobby')
+        //this.scene.stop('lobby')
+        this.scene.setVisible(false, 'lobby')
+
+        // todo : close scene or make it invisible or something when game starts
 
         if(this.scene.isActive('game'))
         {
@@ -83,6 +87,25 @@ export default class Bootstrap extends Phaser.Scene
 
         // for testing
         //this.scene.setVisible(false, 'game')
+    }
+
+    private joinGame = (id: string) =>
+    {
+        //this.scene.stop('lobby')
+        this.scene.setVisible(false, 'lobby')
+
+        if(this.scene.isActive('game'))
+        {
+            console.log('there is another scene active!')
+            this.scene.remove('game')
+        }
+
+        this.server.joinById(id)
+
+        this.scene.launch('game', {
+            server: this.server,
+            onGameOver: this.handleGameOver
+        })
     }
 
 

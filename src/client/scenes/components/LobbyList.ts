@@ -1,23 +1,41 @@
 import Phaser from 'phaser'
 import { RoomAvailable } from 'colyseus.js'
+import LobbyServer from '~/client/services/LobbyServer'
 
 export default class LobbyList extends Phaser.GameObjects.Container
 {
     scene!: Phaser.Scene
-    constructor(scene: Phaser.Scene, x: number, y: number)
+    joinGame!: (id: string) => (void)
+
+    constructor(scene: Phaser.Scene, joinGame: (id: string) => (void), x: number, y: number)
     {
         super(scene, x, y)
         this.scene = scene
 
-        console.log('added at ', x , y)
-        
+        this.joinGame = joinGame
+
     }
 
-    addRow(room: RoomAvailable<any>)
+    update(rooms: RoomAvailable<any>[])
+    {
+        if(rooms.length == 0)
+        {
+            console.log('no rooms')
+            return
+        }
+
+        this.removeAll()
+
+        for(let i = 0; i < rooms.length; i++)
+        {
+            this.addRow(rooms[i], i)
+        }
+    }
+
+    addRow(room: RoomAvailable<any>, i: number)
     {
 
 
-        console.log('adding row')
 
         
         //const row = new Phaser.GameObjects.DOMElement(this.scene).createFromCache('lobbyRow')
@@ -30,14 +48,19 @@ export default class LobbyList extends Phaser.GameObjects.Container
         row.getChildByID('joinButton')
             .addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
                 (event) => {
-                    console.log('join ' + room.roomId.toString())
+                    console.log('join ' + room.roomId)
 
                     // todo:
                     // modify lobbyserver and servers to join this lobby on press
                     // launch and destroy corresponding scenes
+                    // this.lobbyServer.joinGame(room.roomId)
+
+                    this.joinGame(room.roomId)
 
                 }
             )
+
+        row.setY(i * row.displayHeight + 10)
         
         this.add(row)
 

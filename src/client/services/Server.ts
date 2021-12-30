@@ -12,7 +12,7 @@ export default class Server
 {
     private client: Client
     private events: Phaser.Events.EventEmitter
-    private room?: Room<IMyState>
+    private room!: Room<IMyState>
     private _playerIndex = -1
 
     get playerIndex(){
@@ -38,8 +38,22 @@ export default class Server
     async join()
     {
         this.room = await this.client.joinOrCreate<IMyState>('my_room')
-        
-        
+
+        this.initListeners()
+    }
+
+    async joinById(id: string)
+    {
+        this.room = await this.client.joinById<IMyState>(id)
+
+        this.initListeners()
+    }
+
+
+
+    private initListeners()
+    {
+
         this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
             this._playerIndex = message.playerIndex
             //initialize text

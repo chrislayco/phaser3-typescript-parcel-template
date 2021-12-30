@@ -1,7 +1,6 @@
 import { Client, RoomAvailable } from "colyseus.js";
 import { EventEmitter } from "colyseus.js/lib/core/signal"
-import Bootstrap from "../scenes/Bootstrap";
-
+import Server from "./Server";
 
 
 export default class LobbyServer
@@ -10,6 +9,8 @@ export default class LobbyServer
     allRooms: RoomAvailable[] = [];
 
     client: Client
+
+
 
 
 
@@ -24,14 +25,12 @@ export default class LobbyServer
         const lobby = await this.client.joinOrCreate("lobby");
 
         lobby.onMessage("rooms", (rooms) => {
-            console.log('started')
             this.allRooms = rooms;
 
             this.events.emit('lobby-update')
         });
         
         lobby.onMessage("+", ([roomId, room]) => {
-            console.log('room created')
 
             this.events.emit('lobby-update')
 
@@ -62,6 +61,7 @@ export default class LobbyServer
     {
         this.events.on('lobby-update', cb, context)
     }
+
 
     printRooms()
     {

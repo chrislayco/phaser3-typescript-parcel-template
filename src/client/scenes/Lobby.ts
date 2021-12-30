@@ -7,11 +7,12 @@ import LobbyList from './components/LobbyList'
 export default class Lobby extends Phaser.Scene
 {
     lobbyServer!: LobbyServer
-    createNewGame?: () => (void)
+    createNewGame!: () => (void)
+    joinGame!: (id: string) => (void)
     text?: Phaser.GameObjects.Text
 
     domElement?: Phaser.GameObjects.DOMElement
-    roomListContainer: LobbyList
+    roomListContainer!: LobbyList
 
 
 
@@ -27,9 +28,10 @@ export default class Lobby extends Phaser.Scene
         this.load.html('lobbyRow', 'static/lobbyrow.html')
     }
 
-    async create(data: { username : string , lobbyServer: LobbyServer, createNewGame: () => (void) } )
+    async create(data: { username : string , lobbyServer: LobbyServer, createNewGame: () => (void) , joinGame: (id: string) => (void)} )
     {
         this.lobbyServer = data.lobbyServer
+        this.joinGame = data.joinGame
 
         await this.lobbyServer.join()
 
@@ -42,7 +44,8 @@ export default class Lobby extends Phaser.Scene
 
         this.add.text(width * 0.5, height * 0.1, text).setOrigin(0.5)
 
-        this.roomListContainer = new LobbyList(this, width * 0.5, height * 0.7)
+        this.roomListContainer = new LobbyList(this, this.joinGame, width * 0.5, height * 0.7)
+        this.add.existing(this.roomListContainer)
         
         //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
         //client side
@@ -60,8 +63,6 @@ export default class Lobby extends Phaser.Scene
 
         this.domElement = this.add.dom(width * 0.5, height * 0.5)
             .createFromCache('lobby')
-
-        
 
         const button = this.domElement.getChildByName('createGameButton')
         const printButton = this.domElement.getChildByName('printGamesButton')
@@ -85,7 +86,6 @@ export default class Lobby extends Phaser.Scene
     private updateLobbyList()
     {
         let roomList = this.lobbyServer.roomList
-        console.log(roomList.length)
 
         if(roomList.length == 0)
         {
@@ -93,44 +93,8 @@ export default class Lobby extends Phaser.Scene
             return
         }
 
-
-        let s = ''
-
-        this.roomListContainer.removeAll()
-
-        // use a template variable so that we can make a seprate html for row component
-        // and pass in metadata to fill row
-        for(let i = 0; i < roomList.length; i++){
-
-            this.roomListContainer.addRow(roomList[i])
-        }
+        this.roomListContainer.update(roomList)
   
     }
 
-    private createListRow(room: RoomAvailable<any>)
-    {
-    
-        const row = this.add.dom(0, 0).createFromCache('lobbyRow')
-
-        row.getChildByID('roomID').textContent = room.roomId.toString()
-
-        let s = room.clients.toString() + " / " + room.maxClients.toString()
-
-        row.getChildByID('playerCount').textContent = s
-
-        const button = row.getChildByID('joinButton')
-
-        button.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
-            (event) => {
-                console.log('join ' + room.roomId.toString())
-
-                // todo:
-                // modify lobbyserver and servers to join this lobby on press
-                // launch and destroy corresponding scenes
-
-            }
-        )
-        
-        return row
-    }
 }
