@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
-import GameOver from '../GameOver'
-import { Tweens } from 'phaser'
+
 
 export default class TimerBar extends Phaser.GameObjects.Container
 {
@@ -10,9 +9,9 @@ export default class TimerBar extends Phaser.GameObjects.Container
     private timerDuration = 10000
     private timerDurationInSeconds = 10
 
-    private timer: Phaser.Time.TimerEvent
+    private timer?: Phaser.Time.TimerEvent
 
-    private timerTween: Phaser.Tweens.Tween
+    private timerTween?: Phaser.Tweens.Tween
 
     private onComplete: () => (void)
 
@@ -60,7 +59,7 @@ export default class TimerBar extends Phaser.GameObjects.Container
     resetAndStartTimer()
     {
         this.bar.visible = true
-        this.timerTween.play()
+        this.timerTween?.play()
         
         this.textValue = this.timerDurationInSeconds.toString()
 
@@ -77,12 +76,12 @@ export default class TimerBar extends Phaser.GameObjects.Container
 
     hideTimer()
     {
-        if(this.timerTween.isPlaying()){
+        if(this.timerTween?.isPlaying()){
             this.timerTween.seek(0)  
             this.timerTween.stop()
         }
 
-        this.scene.time.removeEvent(this.timer)
+        //this.scene.time.removeEvent(this.timer)
         this.textValue = ''
         this.text.setText(this.textValue)
 

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { Client, RoomAvailable } from 'colyseus.js'
 import LobbyServer from '../services/LobbyServer'
 import { updateLobby } from 'colyseus'
+import LobbyList from './components/LobbyList'
 
 export default class Lobby extends Phaser.Scene
 {
@@ -10,12 +11,14 @@ export default class Lobby extends Phaser.Scene
     text?: Phaser.GameObjects.Text
 
     domElement?: Phaser.GameObjects.DOMElement
+    roomListContainer: LobbyList
 
 
 
     constructor()
     {
         super('lobby')
+        
     }
 
     preload()
@@ -30,6 +33,8 @@ export default class Lobby extends Phaser.Scene
 
         await this.lobbyServer.join()
 
+        
+
         this.createNewGame = data.createNewGame
 
         const { width, height } = this.scale
@@ -37,6 +42,8 @@ export default class Lobby extends Phaser.Scene
 
         this.add.text(width * 0.5, height * 0.1, text).setOrigin(0.5)
 
+        this.roomListContainer = new LobbyList(this, width * 0.5, height * 0.7)
+        
         //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
         //client side
 
@@ -77,26 +84,25 @@ export default class Lobby extends Phaser.Scene
     
     private updateLobbyList()
     {
-        let lobbyList = this.domElement?.getChildByID('lobbyList') 
         let roomList = this.lobbyServer.roomList
-        
-        if(!lobbyList)
+        console.log(roomList.length)
+
+        if(roomList.length == 0)
         {
-            return
-        }
-        else if(roomList.length === 0)
-        {
-            lobbyList.innerHTML = "<li>no rooms found</li>"
+            console.log('no rooms')
             return
         }
 
 
         let s = ''
 
+        this.roomListContainer.removeAll()
+
         // use a template variable so that we can make a seprate html for row component
         // and pass in metadata to fill row
         for(let i = 0; i < roomList.length; i++){
-            s += this.createListRow(roomList[i])
+
+            this.roomListContainer.addRow(roomList[i])
         }
   
     }
@@ -104,7 +110,7 @@ export default class Lobby extends Phaser.Scene
     private createListRow(room: RoomAvailable<any>)
     {
     
-        const row = this.add.dom(400, 500).createFromCache('lobbyRow')
+        const row = this.add.dom(0, 0).createFromCache('lobbyRow')
 
         row.getChildByID('roomID').textContent = room.roomId.toString()
 
@@ -122,19 +128,9 @@ export default class Lobby extends Phaser.Scene
                 // modify lobbyserver and servers to join this lobby on press
                 // launch and destroy corresponding scenes
 
-            })
-
-        //let item = this.domElement.createElement("li")
-        //let ul = document.createElement('ul')
-
-        // let s = ''
-        // s += "<li> "
-        // s += room.roomId.toString()
-        // s += "   " + room.clients
-        // s += " / " + room.maxClients
-        // s += "<button id=\"" + room.roomId.toString() + "\" "
-        // s += "</li>\n"
-
-        return s
+            }
+        )
+        
+        return row
     }
 }
