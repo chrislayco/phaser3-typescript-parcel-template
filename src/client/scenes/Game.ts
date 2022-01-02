@@ -43,7 +43,15 @@ export default class Game extends Phaser.Scene
             throw new Error('no server instance')
         }
 
-        await server.join() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
+        if(data.id)
+        {
+            await server.joinById(data.id)
+        }
+        else
+        {
+            await server.join() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
+        }
+
 
         server.onceStateChanged(this.createBoard, this)
     }
@@ -135,7 +143,7 @@ export default class Game extends Phaser.Scene
 
     private beginGame()
     {
-        //console.log('starting game')
+        console.log('starting game')
 
         const width = this.scale.width * 0.5
         

@@ -32,8 +32,6 @@ export default class Bootstrap extends Phaser.Scene
     {
         //this.createNewGame()
         this.createLandingPage()
-        
-
     }
 
     private createLandingPage()
@@ -69,8 +67,10 @@ export default class Bootstrap extends Phaser.Scene
 
     private createNewGame = () =>
     {   
-        //this.scene.stop('lobby')
-        this.scene.setVisible(false, 'lobby')
+        this.lobbyServer.leave()
+        this.scene.stop('lobby')
+
+        //this.scene.setVisible(false, 'lobby')
 
         // todo : close scene or make it invisible or something when game starts
 
@@ -91,8 +91,8 @@ export default class Bootstrap extends Phaser.Scene
 
     private joinGame = (id: string) =>
     {
-        //this.scene.stop('lobby')
-        this.scene.setVisible(false, 'lobby')
+        this.lobbyServer.leave()
+        this.scene.stop('lobby')
 
         if(this.scene.isActive('game'))
         {
@@ -100,10 +100,11 @@ export default class Bootstrap extends Phaser.Scene
             this.scene.remove('game')
         }
 
-        this.server.joinById(id)
+        
 
         this.scene.launch('game', {
             server: this.server,
+            id: id,
             onGameOver: this.handleGameOver
         })
     }

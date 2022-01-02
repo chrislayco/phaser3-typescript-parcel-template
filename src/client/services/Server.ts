@@ -56,6 +56,7 @@ export default class Server
 
         this.room.onMessage(Message.PlayerIndex, (message: { playerIndex : number }) => {
             this._playerIndex = message.playerIndex
+            console.log('got index')
             //initialize text
             this.events.emit('game-start')
             
@@ -102,10 +103,16 @@ export default class Server
             return
         }
 
+        if(this.room.state.activePlayer === -1)
+        {
+            console.warn('game not started')
+            return
+        }
+        
+
         if(this.playerIndex !== this.room.state.activePlayer)
         {
             console.warn('not this player\'s turn')
-
             //console.log(`player index: this._playerIndex`)
             return
         }

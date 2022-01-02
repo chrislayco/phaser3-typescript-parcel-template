@@ -28,6 +28,8 @@ export default class Lobby extends Phaser.Scene
         this.load.html('lobbyRow', 'static/lobbyrow.html')
     }
 
+    
+
     async create(data: { username : string , lobbyServer: LobbyServer, createNewGame: () => (void) , joinGame: (id: string) => (void)} )
     {
         this.lobbyServer = data.lobbyServer
@@ -80,6 +82,10 @@ export default class Lobby extends Phaser.Scene
                 this.updateLobbyList()
             })
 
+        // printButton.removeEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
+        //     (event) => {
+        //         this.updateLobbyList()
+        //     })
     }
 
     

@@ -11,6 +11,7 @@ export interface IGameSceneData
 {
     server: Server
     onGameOver: (data: {winner: number}) => void
+    id?: string
 }
 
 export interface ILandingPageSceneData

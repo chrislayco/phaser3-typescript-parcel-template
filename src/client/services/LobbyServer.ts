@@ -1,4 +1,4 @@
-import { Client, RoomAvailable } from "colyseus.js";
+import { Client, Room, RoomAvailable } from "colyseus.js";
 import { EventEmitter } from "colyseus.js/lib/core/signal"
 import Server from "./Server";
 
@@ -6,6 +6,7 @@ import Server from "./Server";
 export default class LobbyServer
 {
     events: Phaser.Events.EventEmitter
+    lobby!: Room
     allRooms: RoomAvailable[] = [];
 
     client: Client
@@ -22,15 +23,15 @@ export default class LobbyServer
 
     async join()
     {
-        const lobby = await this.client.joinOrCreate("lobby");
+        this.lobby = await this.client.joinOrCreate("lobby");
 
-        lobby.onMessage("rooms", (rooms) => {
+        this.lobby.onMessage("rooms", (rooms) => {
             this.allRooms = rooms;
 
             this.events.emit('lobby-update')
         });
         
-        lobby.onMessage("+", ([roomId, room]) => {
+        this.lobby.onMessage("+", ([roomId, room]) => {
 
             this.events.emit('lobby-update')
 
@@ -43,7 +44,7 @@ export default class LobbyServer
             }
         });
     
-        lobby.onMessage("-", (roomId) => {
+        this.lobby.onMessage("-", (roomId) => {
             console.log('removed a room')
 
             this.events.emit('lobby-update')
@@ -55,6 +56,12 @@ export default class LobbyServer
     get roomList()
     {
         return this.allRooms
+    }
+
+    leave()
+    {
+        this.lobby.leave()
+        this.lobby.removeAllListeners()
     }
 
     onLobbyUpdate(cb: () => void, context?: any)

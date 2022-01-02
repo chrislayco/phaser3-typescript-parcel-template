@@ -9,9 +9,9 @@ export default class TimerBar extends Phaser.GameObjects.Container
     private timerDuration = 10000
     private timerDurationInSeconds = 10
 
-    private timer?: Phaser.Time.TimerEvent
+    private timer!: Phaser.Time.TimerEvent
 
-    private timerTween?: Phaser.Tweens.Tween
+    private timerTween!: Phaser.Tweens.Tween
 
     private onComplete: () => (void)
 
@@ -81,7 +81,7 @@ export default class TimerBar extends Phaser.GameObjects.Container
             this.timerTween.stop()
         }
 
-        //this.scene.time.removeEvent(this.timer)
+        this.scene.time.removeEvent(this.timer)
         this.textValue = ''
         this.text.setText(this.textValue)
 

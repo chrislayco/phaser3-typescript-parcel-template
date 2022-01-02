@@ -34,10 +34,7 @@ export default class LobbyList extends Phaser.GameObjects.Container
 
     addRow(room: RoomAvailable<any>, i: number)
     {
-
-
-
-        
+  
         //const row = new Phaser.GameObjects.DOMElement(this.scene).createFromCache('lobbyRow')
         
         const row = this.scene.add.dom(0, 0).createFromCache('lobbyRow')
@@ -51,9 +48,9 @@ export default class LobbyList extends Phaser.GameObjects.Container
                     console.log('join ' + room.roomId)
 
                     // todo:
-                    // modify lobbyserver and servers to join this lobby on press
-                    // launch and destroy corresponding scenes
-                    // this.lobbyServer.joinGame(room.roomId)
+                    // figure out why there is another lobby list in corner
+                    // make create game open new game instead of auto join
+                    // make play again go back to lobby instead of join game
 
                     this.joinGame(room.roomId)
 
