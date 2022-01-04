@@ -11,10 +11,6 @@ export default class LobbyServer
 
     client: Client
 
-
-
-
-
     constructor(client: Client)
     {
         this.client = client

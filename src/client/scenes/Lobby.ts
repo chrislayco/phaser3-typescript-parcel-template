@@ -12,7 +12,7 @@ export default class Lobby extends Phaser.Scene
     text?: Phaser.GameObjects.Text
 
     domElement?: Phaser.GameObjects.DOMElement
-    roomListContainer!: LobbyList
+    lobbyList!: LobbyList
 
 
 
@@ -46,8 +46,8 @@ export default class Lobby extends Phaser.Scene
 
         this.add.text(width * 0.5, height * 0.1, text).setOrigin(0.5)
 
-        this.roomListContainer = new LobbyList(this, this.joinGame, width * 0.5, height * 0.7)
-        this.add.existing(this.roomListContainer)
+        this.lobbyList = new LobbyList(this, this.joinGame, width * 0.5, height * 0.7)
+        this.add.existing(this.lobbyList)
         
         //https://docs.colyseus.io/colyseus/builtin-rooms/lobby/ 
         //client side
@@ -79,7 +79,8 @@ export default class Lobby extends Phaser.Scene
 
         printButton.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
-                this.updateLobbyList()
+                //this.updateLobbyList()
+                this.lobbyList.clear()
             })
 
         // printButton.removeEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
@@ -99,7 +100,7 @@ export default class Lobby extends Phaser.Scene
             return
         }
 
-        this.roomListContainer.update(roomList)
+        this.lobbyList.update(roomList)
   
     }
 

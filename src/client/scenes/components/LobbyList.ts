@@ -32,15 +32,22 @@ export default class LobbyList extends Phaser.GameObjects.Container
         }
     }
 
+    clear()
+    {
+        this.iterate((item: Phaser.GameObjects.GameObject) => {
+            item.destroy()
+        })
+    }
+
     addRow(room: RoomAvailable<any>, i: number)
     {
   
         //const row = new Phaser.GameObjects.DOMElement(this.scene).createFromCache('lobbyRow')
         
-        const row = this.scene.add.dom(0, 0).createFromCache('lobbyRow')
+        const row = this.scene.add.dom(30, 30).createFromCache('lobbyRow')
         let s = room.clients.toString() + " / " + room.maxClients.toString()
         
-        row.getChildByID('roomID').textContent = room.roomId.toString()
+        row.getChildByID('roomID').textContent = room.roomId
         row.getChildByID('playerCount').textContent = s
         row.getChildByID('joinButton')
             .addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
@@ -59,6 +66,7 @@ export default class LobbyList extends Phaser.GameObjects.Container
 
         row.setY(i * row.displayHeight + 10)
         
+        console.log('added ', room.roomId, s)
         this.add(row)
 
     }
