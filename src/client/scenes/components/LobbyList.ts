@@ -24,7 +24,7 @@ export default class LobbyList extends Phaser.GameObjects.Container
             return
         }
 
-        this.removeAll()
+        this.clearList()
 
         for(let i = 0; i < rooms.length; i++)
         {
@@ -32,9 +32,9 @@ export default class LobbyList extends Phaser.GameObjects.Container
         }
     }
 
-    clear()
+    private clearList()
     {
-        this.iterate((item: Phaser.GameObjects.GameObject) => {
+        this.getAll().forEach((item) => {
             item.destroy()
         })
     }
@@ -44,7 +44,7 @@ export default class LobbyList extends Phaser.GameObjects.Container
   
         //const row = new Phaser.GameObjects.DOMElement(this.scene).createFromCache('lobbyRow')
         
-        const row = this.scene.add.dom(30, 30).createFromCache('lobbyRow')
+        const row = this.scene.add.dom(0, 0).createFromCache('lobbyRow')
         let s = room.clients.toString() + " / " + room.maxClients.toString()
         
         row.getChildByID('roomID').textContent = room.roomId
@@ -66,7 +66,7 @@ export default class LobbyList extends Phaser.GameObjects.Container
 
         row.setY(i * row.displayHeight + 10)
         
-        console.log('added ', room.roomId, s)
+        console.log('added ', room.roomId, s, ' to ', this)
         this.add(row)
 
     }

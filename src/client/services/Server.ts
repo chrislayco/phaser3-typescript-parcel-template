@@ -35,14 +35,13 @@ export default class Server
     }
 
  
-    async join()
+    async createGame()
     {
-        this.room = await this.client.joinOrCreate<IMyState>('my_room')
-
+        this.room = await this.client.create<IMyState>('my_room')
         this.initListeners()
     }
 
-    async joinById(id: string)
+    async joinGameById(id: string)
     {
         this.room = await this.client.joinById<IMyState>(id)
 

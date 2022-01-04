@@ -79,8 +79,7 @@ export default class Lobby extends Phaser.Scene
 
         printButton.addEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 
             (event) => {
-                //this.updateLobbyList()
-                this.lobbyList.clear()
+                this.updateLobbyList()
             })
 
         // printButton.removeEventListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, 

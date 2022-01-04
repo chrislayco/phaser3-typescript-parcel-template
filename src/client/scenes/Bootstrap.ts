@@ -9,6 +9,7 @@ export default class Bootstrap extends Phaser.Scene
     private server!: Server
     private lobbyServer!: LobbyServer
     private client!: Client
+    private username!: string
 
     constructor()
     {
@@ -44,13 +45,22 @@ export default class Bootstrap extends Phaser.Scene
         )
     }
 
-    private createLobby(data: { username: string })
+    private createLobby(data?: { username: string })
     {
-        this.scene.stop('landing-page')
+        if(this.scene.isActive('landing-page'))
+        {
+            this.scene.stop('landing-page')
+        }
+
+        if(!this.username && data?.username)
+        {
+            this.username = data.username
+        }
+
         this.scene.launch(
             'lobby',
             {
-                ...data,
+                username: this.username,
                 lobbyServer: this.lobbyServer,
                 createNewGame: this.createNewGame,
                 joinGame: this.joinGame
@@ -114,7 +124,7 @@ export default class Bootstrap extends Phaser.Scene
     private handleRestart = () => {
         this.scene.stop('game-over')
         
-        this.createNewGame()
+        this.createLobby()
     }
 
     private handleGameOver = (data: {IGameOverSceneData}) => {

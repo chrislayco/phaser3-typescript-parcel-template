@@ -45,11 +45,11 @@ export default class Game extends Phaser.Scene
 
         if(data.id)
         {
-            await server.joinById(data.id)
+            await server.joinGameById(data.id)
         }
         else
         {
-            await server.join() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
+            await server.createGame() //WHEN THIS IS DONE, THE PLAYERINDEX IS ASSIGNED
         }
 
 
