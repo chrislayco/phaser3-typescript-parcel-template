@@ -82,8 +82,6 @@ export default class Bootstrap extends Phaser.Scene
 
         //this.scene.setVisible(false, 'lobby')
 
-        // todo : close scene or make it invisible or something when game starts
-
         if(this.scene.isActive('game'))
         {
             console.log('there is another scene active!')

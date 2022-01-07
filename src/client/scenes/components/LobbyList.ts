@@ -54,11 +54,6 @@ export default class LobbyList extends Phaser.GameObjects.Container
                 (event) => {
                     console.log('join ' + room.roomId)
 
-                    // todo:
-                    // figure out why there is another lobby list in corner
-                    // make create game open new game instead of auto join
-                    // make play again go back to lobby instead of join game
-
                     this.joinGame(room.roomId)
 
                 }

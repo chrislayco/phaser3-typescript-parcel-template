@@ -50,7 +50,9 @@ export default class TimerBar extends Phaser.GameObjects.Container
     }
 
     private updateTimerText = () => {
-        this.textValue = (Number(this.textValue) - 0.1).toPrecision(2)
+
+        let precision = Number(this.textValue) <= 1 ? 1 : 2
+        this.textValue = (Number(this.textValue) - 0.1).toPrecision(precision)
         
         //(this.textValue - 0.1).toPrecision(2)
         this.text.setText(this.textValue)
